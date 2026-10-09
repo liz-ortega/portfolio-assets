@@ -314,6 +314,8 @@
       delete root.position; root.left = null; root.top = null; root.widthType = 3; root.heightType = 2;
       const clean = (n) => { for (const k of ['cursor', 'customCursorSmartComponentId', 'customCursorType', 'fillImage', 'fillImageOriginalName', 'intrinsicHeight', 'intrinsicWidth', 'link', 'duplicatedFrom', 'layout', 'overflow']) if (n[k] === null || n[k] === undefined) delete n[k]; (n.children || []).forEach(clean); };
       clean(root);
+      const fr = (n) => { if (n.widthType === 3) n.width = 1; if (n.heightType === 3) n.height = 1; (n.children || []).forEach(fr); };
+      fr(root);
       root.name = opts.name || 'Page';
       const fix = (n, pid) => { n.parentid = pid; (n.children || []).forEach((c) => fix(c, n.id)); };
       fix(root, 'clipboard');
