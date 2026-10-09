@@ -274,6 +274,11 @@
           const lefts = [...el.children].map((c) => Math.round(c.getBoundingClientRect().left));
           if (dir === 'horizontal' && new Set(tops.map((t) => Math.round(t / 8))).size <= 1) n.stackWrapEnabled = false;
           if (dir === 'vertical' && new Set(lefts.map((t) => Math.round(t / 8))).size <= 1) n.stackWrapEnabled = false;
+          // every child on its own row -> it's really a vertical stack at this width
+          else if (dir === 'horizontal' && tops.length > 1 && new Set(tops.map((t) => Math.round(t / 8))).size === tops.length) {
+            dir = 'vertical'; n.stackDirection = 'vertical'; n.stackWrapEnabled = false; n.stackDistribution = 'start';
+            n.stackAlignment = ai.includes('center') ? 'center' : ai.includes('end') ? 'end' : 'start';
+          }
         }
       } else if (inlineRow) { n.stackAlignment = 'center'; n.stackDistribution = cs.textAlign === 'center' ? 'center' : 'start'; }
       else { n.stackAlignment = cs.textAlign === 'center' ? 'center' : 'start'; n.stackDistribution = 'start'; }
