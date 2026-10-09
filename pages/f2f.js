@@ -345,7 +345,7 @@
         (n.children || []).forEach((c) => fitfix(c, n.widthType === 2));
       };
       fitfix(root, false);
-      const fr = (n) => { if (n.widthType === 3) n.width = 1; if (n.heightType === 3) n.height = 1; (n.children || []).forEach(fr); };
+      const fr = (n) => { if (n.widthType === 3) n.width = Math.max(1, Math.round(n.width)); if (n.heightType === 3) n.height = 1; (n.children || []).forEach(fr); };
       fr(root);
       root.name = opts.name || 'Page';
       const fix = (n, pid) => { n.parentid = pid; (n.children || []).forEach((c) => fix(c, n.id)); };
