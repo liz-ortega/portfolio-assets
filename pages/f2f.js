@@ -292,8 +292,8 @@
           const cw = cn.width;
           const fillsCross = Math.abs(cw - contentW) <= 2;
           if (cn.__class === 'RichTextNode') {
-            if (m.singleLine && !(dir === 'vertical' && fillsCross && m.align !== 'start')) cn.widthType = 2;
-            else if (dir === 'vertical' && fillsCross) cn.widthType = 3;
+            if (dir === 'vertical' && fillsCross) cn.widthType = 3;
+            else if (m.singleLine) cn.widthType = 2;
             else cn.width = cn.width + 2;
           } else if (cn.fillType !== 'image' && cn.layout) {
             if (dir === 'horizontal') cn.widthType = m.grow ? 3 : (m.explicitW || m.wraps ? 0 : 2);
