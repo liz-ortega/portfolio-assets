@@ -141,7 +141,8 @@
     }
     const bw = px(cs.borderTopWidth), bl = px(cs.borderLeftWidth), bb = px(cs.borderBottomWidth), br = px(cs.borderRightWidth);
     if ((bw || bl || bb || br) && cs.borderStyle !== 'none') {
-      n.borderEnabled = true; n.borderColor = cs.borderTopColor !== 'rgba(0, 0, 0, 0)' ? cs.borderTopColor : cs.borderBottomColor;
+      const sides = [[bw, cs.borderTopColor], [br, cs.borderRightColor], [bb, cs.borderBottomColor], [bl, cs.borderLeftColor]].sort((a, b) => b[0] - a[0]);
+      n.borderEnabled = true; n.borderColor = sides[0][1];
       n.borderStyle = cs.borderTopStyle === 'dashed' || cs.borderBottomStyle === 'dashed' ? 'dashed' : 'solid';
       n.borderTop = bw; n.borderRight = br; n.borderBottom = bb; n.borderLeft = bl; n.borderWidth = Math.max(bw, bl, bb, br);
       n.borderPerSide = !(bw === bl && bl === bb && bb === br);
@@ -227,6 +228,20 @@
       n = textNode(el, r, cs, inlineHTML(el, cs));
       const a = el.tagName === 'A' ? el : null;
       if (a && a.getAttribute('href')) n.html = n.html.replace(/^<p([^>]*)>([\s\S]*)<\/p>$/, (m, at, inner) => `<p${at}><a${linkAttr(a.getAttribute('href'), a.getAttribute('target') === '_blank' || isExternal(a.getAttribute('href')))}>${inner}</a></p>`);
+    } else if (isTextOnly(el) && tag !== 'A') {
+      // text with its own background/padding/border -> padded frame around one text layer
+      n = frame(name || tag.toLowerCase(), r, null, el);
+      applyBox(n, cs, el);
+      const pt = px(cs.paddingTop) + px(cs.borderTopWidth), pl = px(cs.paddingLeft) + px(cs.borderLeftWidth);
+      const pr = px(cs.paddingRight) + px(cs.borderRightWidth), pb = px(cs.paddingBottom) + px(cs.borderBottomWidth);
+      n.layout = 'stack'; n.stackDirection = 'vertical'; n.stackAlignment = cs.textAlign === 'center' ? 'center' : 'start'; n.stackDistribution = 'start'; n.gap = 0;
+      n.padding = Math.round(pt); n.paddingTop = Math.round(pt); n.paddingRight = Math.round(pr); n.paddingBottom = Math.round(pb); n.paddingLeft = Math.round(pl);
+      n.paddingPerSide = !(pt === pr && pr === pb && pb === pl);
+      const t = textNode(el, { width: r.width - pl - pr, height: r.height - pt - pb }, cs, inlineHTML(el, cs));
+      t.id = idFor(el, 't'); t.widthType = 3; t.width = 1; t.heightType = 2;
+      META.set(t, Object.assign(META.get(t) || {}, {}));
+      n.children.push(t);
+      n.heightType = 2;
     } else {
       n = frame(name || tag.toLowerCase(), r, null, el);
       applyBox(n, cs, el);
@@ -237,7 +252,7 @@
           if (!c.textContent.trim()) continue;
           const range = document.createRange(); range.selectNodeContents(c); const tr = range.getBoundingClientRect();
           if (tr.width < 1) continue;
-          kids.push({ text: c, r: tr });
+          kids.push({ text: c, r: tr, lines: new Set([...range.getClientRects()].map((q) => Math.round(q.top))).size });
         } else if (c.nodeType === 1) kids.push({ el: c });
       }
       const pt = px(cs.paddingTop) + px(cs.borderTopWidth), pl = px(cs.paddingLeft) + px(cs.borderLeftWidth);
@@ -255,7 +270,7 @@
       }
       // inline content on one line (e.g. a small badge followed by text) -> horizontal row
       let inlineRow = false;
-      if (!disp.includes('flex') && !isGrid && inflow.length > 1 && inflow.every((k) => k.text || /^inline/.test(getComputedStyle(k.el).display))) {
+      if (!disp.includes('flex') && !isGrid && inflow.length > 1 && inflow.every((k) => (k.text && k.lines <= 1) || (k.el && /^inline/.test(getComputedStyle(k.el).display) && k.el.getClientRects().length <= 1))) {
         const rs = inflow.map((k) => (k.text ? k.r : k.el.getBoundingClientRect()));
         if (Math.max(...rs.map((x) => x.top)) < Math.min(...rs.map((x) => x.bottom))) { dir = 'horizontal'; inlineRow = true; }
       }
@@ -317,7 +332,12 @@
         n.gridRowCount = Math.ceil(built.length / cols); n.gridAlignment = 'start';
         n.gap = Math.round(multicol ? (px(cs.columnGap) || 16) : (colGap || rowGap));
         if (multicol) n.gridType = 'columnMasonry';
-        for (const b of built) { b.n.widthType = 3; b.n.width = 1; b.n.gridItemFillCellWidth = true; b.n.gridItemFillCellHeight = false; if (b.n.__class === 'RichTextNode' || b.n.layout) b.n.heightType = 2; }
+        const stretch = !multicol && (cs.alignItems === 'normal' || cs.alignItems === 'stretch');
+        for (const b of built) {
+          b.n.widthType = 3; b.n.width = 1; b.n.gridItemFillCellWidth = true; b.n.gridItemFillCellHeight = false;
+          if (b.n.__class === 'RichTextNode' || b.n.layout) b.n.heightType = 2;
+          if (stretch && b.n.__class === 'FrameNode' && b.n.layout && b.n.fillType !== 'image') { b.n.gridItemFillCellHeight = true; b.n.heightType = 3; b.n.height = 1; }
+        }
       } else {
         // measure gaps along main axis
         const main = dir === 'vertical' ? 'top' : 'left', mainEnd = dir === 'vertical' ? 'bottom' : 'right';
