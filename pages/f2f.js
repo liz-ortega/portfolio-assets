@@ -94,6 +94,7 @@
   const px = (v) => parseFloat(v) || 0;
   const color = (c) => (!c || c === 'rgba(0, 0, 0, 0)' || c === 'transparent') ? null : c;
   const assets = new Set();
+  const META = new WeakMap();
 
   const frame = (name, r, extra) => Object.assign(structuredClone(FT), {
     id: RID(), name, children: [], width: Math.round(r.width), height: Math.round(r.height),
@@ -163,6 +164,8 @@
       widthType: 0, heightType: 2, left: null, top: null, right: null, bottom: null,
       html: `<p dir="auto" style="${textVars(cs, true)}">${htmlInner}</p>`,
     });
+    const lh = cs.lineHeight === 'normal' ? 1.2 * parseFloat(cs.fontSize) : parseFloat(cs.lineHeight);
+    META.set(n, { singleLine: r.height <= lh * 1.5, align: cs.textAlign === 'center' ? 'center' : cs.textAlign === 'right' || cs.textAlign === 'end' ? 'end' : 'start' });
     return n;
   };
 
@@ -273,14 +276,20 @@
         // sizing per child
         for (const b of built) {
           const cn = b.n; if (cn.name === 'Spacer') continue;
-          const cw = cn.width, ch = cn.height;
-          if (dir === 'vertical') {
-            if (Math.abs(cw - contentW) <= 2) cn.widthType = 3;
-          } else {
-            // horizontal: keep fixed width; text that fits on one line -> fit
-            if (cn.__class === 'RichTextNode' && ch < 1.6 * parseFloat(cs.fontSize) * 1.7) cn.widthType = 2;
-          }
-          if (cn.__class === 'FrameNode' && cn.fillType !== 'image' && cn.layout) cn.heightType = 2;
+          const m = META.get(cn) || {};
+          const cw = cn.width;
+          const fillsCross = Math.abs(cw - contentW) <= 2;
+          if (cn.__class === 'RichTextNode') {
+            if (m.singleLine && !(dir === 'vertical' && fillsCross && m.align !== 'start')) cn.widthType = 2;
+            else if (dir === 'vertical' && fillsCross) cn.widthType = 3;
+            else cn.width = cn.width + 2;
+          } else if (cn.fillType !== 'image' && cn.layout) {
+            if (dir === 'horizontal') cn.widthType = m.grow ? 3 : (m.explicitW ? 0 : 2);
+            else if (fillsCross) cn.widthType = 3;
+            else if (!m.explicitW) cn.widthType = 2;
+            cn.heightType = m.explicitH ? 0 : 2;
+          } else if (dir === 'vertical' && fillsCross) cn.widthType = 3;
+          else if (dir === 'horizontal' && m.grow) cn.widthType = 3;
         }
       }
       for (const b of built) n.children.push(b.n);
@@ -297,6 +306,11 @@
       if (!n.children.length) { n.layout = null; n.heightType = 0; }
     }
     if (n.__class === 'FrameNode' && tag === 'A' && n.layout) applyBox(n, cs, el);
+    if (n.__class === 'FrameNode') {
+      const st = el.style || {};
+      META.set(n, Object.assign(META.get(n) || {}, { grow: parseFloat(cs.flexGrow) > 0 || (st.flex && /^[1-9]/.test(st.flex)), explicitW: !!(st.width || st.maxWidth || (st.flex && /px/.test(st.flex)) || st.aspectRatio), explicitH: !!(st.height || st.minHeight || st.aspectRatio) }));
+    } else if (!META.get(n)) META.set(n, {});
+    if (n.__class === 'RichTextNode' && el.style && parseFloat(cs.flexGrow) > 0) META.get(n).grow = true;
     return n;
   };
 
