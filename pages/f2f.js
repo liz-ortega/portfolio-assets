@@ -230,6 +230,12 @@
         n.stackAlignment = ai === 'stretch' || ai === 'normal' ? 'start' : mapA(ai);
         n.stackDistribution = jc.includes('between') ? 'space-between' : jc.includes('around') ? 'space-around' : jc.includes('evenly') ? 'space-evenly' : mapA(jc);
         n.stackWrapEnabled = cs.flexWrap === 'wrap';
+        if (n.stackWrapEnabled) {
+          const tops = [...el.children].filter((c) => getComputedStyle(c).position !== 'absolute').map((c) => Math.round(c.getBoundingClientRect().top));
+          const lefts = [...el.children].map((c) => Math.round(c.getBoundingClientRect().left));
+          if (dir === 'horizontal' && new Set(tops.map((t) => Math.round(t / 8))).size <= 1) n.stackWrapEnabled = false;
+          if (dir === 'vertical' && new Set(lefts.map((t) => Math.round(t / 8))).size <= 1) n.stackWrapEnabled = false;
+        }
       } else { n.stackAlignment = cs.textAlign === 'center' ? 'center' : 'start'; n.stackDistribution = 'start'; }
       const rowGap = px(cs.rowGap), colGap = px(cs.columnGap);
       // build children
@@ -284,9 +290,9 @@
             else if (dir === 'vertical' && fillsCross) cn.widthType = 3;
             else cn.width = cn.width + 2;
           } else if (cn.fillType !== 'image' && cn.layout) {
-            if (dir === 'horizontal') cn.widthType = m.grow ? 3 : (m.explicitW ? 0 : 2);
+            if (dir === 'horizontal') cn.widthType = m.grow ? 3 : (m.explicitW || m.wraps ? 0 : 2);
             else if (fillsCross) cn.widthType = 3;
-            else if (!m.explicitW) cn.widthType = 2;
+            else if (!m.explicitW && !m.wraps) cn.widthType = 2;
             cn.heightType = m.explicitH ? 0 : 2;
           } else if (dir === 'vertical' && fillsCross) cn.widthType = 3;
           else if (dir === 'horizontal' && m.grow) cn.widthType = 3;
@@ -308,7 +314,7 @@
     if (n.__class === 'FrameNode' && tag === 'A' && n.layout) applyBox(n, cs, el);
     if (n.__class === 'FrameNode') {
       const st = el.style || {};
-      META.set(n, Object.assign(META.get(n) || {}, { grow: parseFloat(cs.flexGrow) > 0 || (st.flex && /^[1-9]/.test(st.flex)), explicitW: !!(st.width || st.maxWidth || (st.flex && /px/.test(st.flex)) || st.aspectRatio), explicitH: !!(st.height || st.minHeight || st.aspectRatio) }));
+      META.set(n, Object.assign(META.get(n) || {}, { wraps: n.stackWrapEnabled, grow: parseFloat(cs.flexGrow) > 0 || (st.flex && /^[1-9]/.test(st.flex)), explicitW: !!(st.width || st.maxWidth || (st.flex && /px/.test(st.flex)) || st.aspectRatio), explicitH: !!(st.height || st.minHeight || st.aspectRatio) }));
     } else if (!META.get(n)) META.set(n, {});
     if (n.__class === 'RichTextNode' && el.style && parseFloat(cs.flexGrow) > 0) META.get(n).grow = true;
     return n;
@@ -328,6 +334,11 @@
       delete root.position; root.left = null; root.top = null; root.widthType = 3; root.heightType = 2;
       const clean = (n) => { for (const k of ['cursor', 'customCursorSmartComponentId', 'customCursorType', 'fillImage', 'fillImageOriginalName', 'intrinsicHeight', 'intrinsicWidth', 'link', 'duplicatedFrom', 'layout', 'overflow']) if (n[k] === null || n[k] === undefined) delete n[k]; (n.children || []).forEach(clean); };
       clean(root);
+      const fitfix = (n, parentFit) => {
+        if (parentFit && n.widthType === 3) { const m = META.get(n) || {}; n.widthType = (n.__class === 'RichTextNode' && m.singleLine) ? 2 : 0; }
+        (n.children || []).forEach((c) => fitfix(c, n.widthType === 2));
+      };
+      fitfix(root, false);
       const fr = (n) => { if (n.widthType === 3) n.width = 1; if (n.heightType === 3) n.height = 1; (n.children || []).forEach(fr); };
       fr(root);
       root.name = opts.name || 'Page';
