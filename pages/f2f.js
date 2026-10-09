@@ -252,7 +252,7 @@
       }
       if (isGrid) {
         const cols = cs.gridTemplateColumns.split(' ').filter((x) => x && x !== '/').length || 1;
-        n.gridColumnCount = cols; n.gridColumnWidthType = 'minmax'; n.gridColumnMinWidth = 1; n.gridRowHeightType = 'auto';
+        n.gridColumnCount = cols; n.gridColumnWidthType = 'minmax'; n.gridColumnMinWidth = 10; n.gridColumnWidth = 10; n.gridRowHeightType = 'auto';
         n.gridRowCount = Math.ceil(built.length / cols); n.gap = Math.round(colGap || rowGap); n.gridAlignment = 'start';
         for (const b of built) { b.n.widthType = 3; b.n.gridItemFillCellWidth = true; b.n.gridItemFillCellHeight = false; if (b.n.__class === 'RichTextNode') b.n.heightType = 2; }
       } else {
