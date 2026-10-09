@@ -374,6 +374,7 @@
       META.set(n, Object.assign(META.get(n) || {}, { pill: cs.display.startsWith('inline') || (n.children.length <= 3 && n.children.every((c) => c.__class === 'RichTextNode' || c.fillType === 'image')), wraps: n.stackWrapEnabled, grow: parseFloat(cs.flexGrow) > 0 || (st.flex && /^[1-9]/.test(st.flex)), explicitW: !!(st.width || st.maxWidth || (st.flex && /px/.test(st.flex)) || st.aspectRatio), explicitH: !!(st.height || st.minHeight || st.aspectRatio) }));
     } else if (!META.get(n)) META.set(n, {});
     if (n.__class === 'RichTextNode' && el.style && parseFloat(cs.flexGrow) > 0) META.get(n).grow = true;
+    if (/px$/.test(cs.maxWidth) && n.__class !== 'RichTextNode') n.maxWidth = Math.round(px(cs.maxWidth)) + 'px';
     if (el.dataset && el.dataset.ov) { n.codeOverrideEnabled = true; n.codeOverrideIdentifier = OVPFX + 'with' + el.dataset.ov; }
     if (cs.position === 'sticky') { n.position = 'sticky'; n.positionStickyTop = Math.round(px(cs.top)); }
     return n;
@@ -429,7 +430,7 @@
     } finally { window.getComputedStyle = prevGCS; document.createRange = prevCR; }
   };
 
-  const BPKEYS = ['width', 'height', 'widthType', 'heightType', 'stackDirection', 'stackDistribution', 'stackAlignment', 'stackWrapEnabled', 'gap', 'padding', 'paddingPerSide', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'gridColumnCount', 'gridRowCount', 'html', 'left', 'top', 'right', 'bottom', 'fillImage', 'aspectRatio', 'radius', 'radiusTopLeft', 'radiusTopRight', 'radiusBottomLeft', 'radiusBottomRight', 'positionStickyTop'];
+  const BPKEYS = ['maxWidth', 'width', 'height', 'widthType', 'heightType', 'stackDirection', 'stackDistribution', 'stackAlignment', 'stackWrapEnabled', 'gap', 'padding', 'paddingPerSide', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'gridColumnCount', 'gridRowCount', 'html', 'left', 'top', 'right', 'bottom', 'fillImage', 'aspectRatio', 'radius', 'radiusTopLeft', 'radiusTopRight', 'radiusBottomLeft', 'radiusBottomRight', 'positionStickyTop'];
   const index = (n, m = new Map()) => { m.set(n.id, n); (n.children || []).forEach((c) => index(c, m)); return m; };
   const diffTrees = (D, X) => {
     const dm = index(D), xm = index(X), out = {};
@@ -454,7 +455,7 @@
     IDS = new WeakMap(); SEQ = 0; PFX = opts.pfx || 'pg';
     assets.clear();
     const ifr = doc.defaultView.frameElement;
-    const widths = opts.widths || [1500, 810, 390];
+    const widths = opts.widths || [1200, 810, 390];
     const trees = [];
     for (const w of widths) {
       ifr.style.width = w + 'px';
