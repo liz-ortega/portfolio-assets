@@ -3,10 +3,10 @@
 (() => {
   const RID = () => { const a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; let s = ''; for (let i = 0; i < 9; i++) s += a[Math.floor(Math.random() * a.length)]; return s; };
   const tplRoot = window.__pbj.layers.tree.root.children[0];
-  const FT = structuredClone(tplRoot); delete FT.children; delete FT.position;
+  const FT = structuredClone(tplRoot); delete FT.children; delete FT.position; FT.visible = true; FT.opacity = 1; FT.rotation = 0;
   for (const k of ['duplicatedFrom', 'link', 'cursor', 'customCursorSmartComponentId', 'customCursorType', 'boxShadows', 'fillImage', 'fillImageOriginalName']) FT[k] = null;
   FT.boxShadows = []; FT.cursor = null; FT.customCursorType = null;
-  const TT = structuredClone(tplRoot.children.find((c) => c.__class === 'RichTextNode')); delete TT.children; delete TT.position; TT.duplicatedFrom = null;
+  const TT = structuredClone(tplRoot.children.find((c) => c.__class === 'RichTextNode')); delete TT.children; delete TT.position; TT.duplicatedFrom = null; TT.visible = true; TT.opacity = 1;
   for (const k of Object.keys(TT)) if (k.startsWith('stylePreset')) delete TT[k];
 
   const FONTS = {
