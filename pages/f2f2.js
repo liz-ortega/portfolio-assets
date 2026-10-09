@@ -261,7 +261,7 @@
       const disp = cs.display;
       let dir = 'vertical';
       if (disp.includes('flex')) dir = cs.flexDirection.startsWith('row') ? 'horizontal' : 'vertical';
-      const isGrid = disp.includes('grid');
+      let isGrid = disp.includes('grid');
       const inflow = [], abs = [];
       for (const k of kids) {
         if (k.text) { inflow.push(k); continue; }
@@ -292,7 +292,10 @@
               const row = rows.find((rw) => q.top < rw.bottom - 1 && q.bottom > rw.top + 1);
               if (row) { row.top = Math.min(row.top, q.top); row.bottom = Math.max(row.bottom, q.bottom); row.n++; } else rows.push({ top: q.top, bottom: q.bottom, n: 1 });
             }
+            const maxPer = Math.max(...rows.map((rw) => rw.n));
+            const allGrow = [...el.children].every((c) => getComputedStyle(c).position === 'absolute' || parseFloat(getComputedStyle(c).flexGrow) > 0);
             if (rows.length <= 1) n.stackWrapEnabled = false;
+            else if (maxPer > 1 && allGrow) { isGrid = true; n.stackWrapEnabled = false; n.__forceCols = maxPer; }
             else if (kq.length > 1 && rows.length === kq.length) {
               // every child on its own row -> it's really a vertical stack at this width
               dir = 'vertical'; n.stackDirection = 'vertical'; n.stackWrapEnabled = false; n.stackDistribution = 'start';
@@ -324,13 +327,14 @@
       const multicol = (cs.columnCount !== 'auto' || cs.columnWidth !== 'auto') && built.length > 1;
       const colCount = () => new Set(built.map((b) => Math.round(b.r.left / 6))).size;
       if (multicol || isGrid) {
-        let cols = Math.max(1, Math.min(built.length || 1, colCount()));
+        let cols = n.__forceCols || Math.max(1, Math.min(built.length || 1, colCount()));
+        delete n.__forceCols;
         // fixed-count grids squeezed on small screens: fall back to fewer columns
         if (cols > 1 && contentW / cols < 120) cols = Math.max(1, Math.floor(contentW / 150));
         n.layout = 'grid';
         n.gridColumnCount = cols; n.gridColumnWidthType = 'minmax'; n.gridColumnMinWidth = 10; n.gridColumnWidth = 10; n.gridRowHeightType = 'auto';
         n.gridRowCount = Math.ceil(built.length / cols); n.gridAlignment = 'start';
-        n.gap = Math.round(multicol ? (px(cs.columnGap) || 16) : (colGap || rowGap));
+        n.gap = Math.round(multicol ? (px(cs.columnGap) || 16) : (colGap || rowGap || px(cs.gap)));
         if (multicol) n.gridType = 'columnMasonry';
         const stretch = !multicol && (cs.alignItems === 'normal' || cs.alignItems === 'stretch');
         for (const b of built) {

@@ -144,7 +144,10 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
 }, { src, ASSET, page });
 const dir = "/home/claude/portfolio-assets/";
 const files = fs.readdirSync(dir);
-const fixed = html.replace(/([0-9a-f]{32})__EXT__/g, (m, id) => { const f = files.find((x) => x.startsWith(id)); return f || id; });
+let tweaked = html;
+// small layout tweaks for Framer: keep the three sticky notes on one row on desktop
+if (page === "FixIt") tweaked = tweaked.split("flex:1 1 260px;padding:24px 22px").join("flex:1 1 220px;padding:24px 22px");
+const fixed = tweaked.replace(/([0-9a-f]{32})__EXT__/g, (m, id) => { const f = files.find((x) => x.startsWith(id)); return f || id; });
 fs.writeFileSync(out, fixed);
 console.log(out, fixed.length, (fixed.match(/\{\{/g) || []).length, "holes left", (fixed.match(/data-ov=/g) || []).length, "overrides");
 await b.close();
