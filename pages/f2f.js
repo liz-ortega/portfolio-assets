@@ -311,7 +311,9 @@
     document.createRange = () => doc.createRange();
     try {
       const root = build(rootEl, null);
-      root.position = 'absolute'; root.left = 0; root.top = 0; root.widthType = 0; root.heightType = 0;
+      delete root.position; root.left = null; root.top = null; root.widthType = 3; root.heightType = 2;
+      const clean = (n) => { for (const k of ['cursor', 'customCursorSmartComponentId', 'customCursorType', 'fillImage', 'fillImageOriginalName', 'intrinsicHeight', 'intrinsicWidth', 'link', 'duplicatedFrom', 'layout', 'overflow']) if (n[k] === null || n[k] === undefined) delete n[k]; (n.children || []).forEach(clean); };
+      clean(root);
       root.name = opts.name || 'Page';
       const fix = (n, pid) => { n.parentid = pid; (n.children || []).forEach((c) => fix(c, n.id)); };
       fix(root, 'clipboard');
