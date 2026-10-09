@@ -270,15 +270,20 @@
         n.stackDistribution = jc.includes('between') ? 'space-between' : jc.includes('around') ? 'space-around' : jc.includes('evenly') ? 'space-evenly' : mapA(jc);
         n.stackWrapEnabled = cs.flexWrap === 'wrap';
         if (n.stackWrapEnabled) {
-          const tops = [...el.children].filter((c) => getComputedStyle(c).position !== 'absolute').map((c) => Math.round(c.getBoundingClientRect().top));
-          const lefts = [...el.children].map((c) => Math.round(c.getBoundingClientRect().left));
-          if (dir === 'horizontal' && new Set(tops.map((t) => Math.round(t / 8))).size <= 1) n.stackWrapEnabled = false;
-          if (dir === 'vertical' && new Set(lefts.map((t) => Math.round(t / 8))).size <= 1) n.stackWrapEnabled = false;
-          // every child on its own row -> it's really a vertical stack at this width
-          else if (dir === 'horizontal' && tops.length > 1 && new Set(tops.map((t) => Math.round(t / 8))).size === tops.length) {
-            dir = 'vertical'; n.stackDirection = 'vertical'; n.stackWrapEnabled = false; n.stackDistribution = 'start';
-            n.stackAlignment = ai.includes('center') ? 'center' : ai.includes('end') ? 'end' : 'start';
-          }
+          const kq = [...el.children].filter((c) => { const k = getComputedStyle(c); return k.position !== 'absolute' && k.display !== 'none'; }).map((c) => c.getBoundingClientRect()).filter((q) => q.width > 0 && q.height > 0);
+          if (dir === 'horizontal') {
+            const rows = [];
+            for (const q of kq) {
+              const row = rows.find((rw) => q.top < rw.bottom - 1 && q.bottom > rw.top + 1);
+              if (row) { row.top = Math.min(row.top, q.top); row.bottom = Math.max(row.bottom, q.bottom); row.n++; } else rows.push({ top: q.top, bottom: q.bottom, n: 1 });
+            }
+            if (rows.length <= 1) n.stackWrapEnabled = false;
+            else if (kq.length > 1 && rows.length === kq.length) {
+              // every child on its own row -> it's really a vertical stack at this width
+              dir = 'vertical'; n.stackDirection = 'vertical'; n.stackWrapEnabled = false; n.stackDistribution = 'start';
+              n.stackAlignment = ai.includes('center') ? 'center' : ai.includes('end') ? 'end' : 'start';
+            }
+          } else if (new Set(kq.map((q) => Math.round(q.left / 8))).size <= 1) n.stackWrapEnabled = false;
         }
       } else if (inlineRow) { n.stackAlignment = 'center'; n.stackDistribution = cs.textAlign === 'center' ? 'center' : 'start'; }
       else { n.stackAlignment = cs.textAlign === 'center' ? 'center' : 'start'; n.stackDistribution = 'start'; }
