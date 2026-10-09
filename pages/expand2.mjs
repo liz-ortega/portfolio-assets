@@ -121,7 +121,7 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
     }
     // About: indicator dots get their own style overrides
     if (tag === "span" && /\{\{dot([01])\}\}/.test(node.getAttribute("style") || "")) el.setAttribute("data-ov", /dot0/.test(node.getAttribute("style")) ? "DotPixel" : "DotPhoto");
-    if (tag === "aside") { el.setAttribute("data-ov", "StickyToc"); el.setAttribute("style", (el.getAttribute("style") || "") + ";align-self:flex-start"); }
+    if (tag === "aside") { el.setAttribute("data-fillh", "1"); el.setAttribute("style", (el.getAttribute("style") || "").replace(/align-self:[^;]*;?/g, "") + ";align-self:stretch"); }
     if (tag === "div" && /^width:\s*8%;height:100%/.test(node.getAttribute("style") || "")) el.setAttribute("data-ov", "ProgressBar");
     if (tag === "span" && /^\s*\d+% · LEVEL (\d+)\s*$/.test(node.textContent)) el.setAttribute("data-ov", "Progress" + node.textContent.match(/LEVEL (\d+)/)[1]);
     if (tag === "helmet") el.setAttribute("data-helmet", "1");
@@ -130,6 +130,28 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
   };
   const root = outDoc.createElement("div");
   for (const c of xdc.childNodes) expand(c, Object.assign(Object.create(null), vals), root);
+  // nav order on every page: work, about, résumé, play (then "say hi")
+  for (const pl of root.querySelectorAll('a.navlink[href="Play.dc.html"]')) {
+    const links = [...pl.parentElement.children].filter((c) => c.classList && c.classList.contains("navlink"));
+    const last = links[links.length - 1];
+    if (last && last !== pl) last.after(pl);
+  }
+  // work cards: image zooms and "view case study" pill fades in on hover
+  for (const im of root.querySelectorAll(".wcard .card-img")) im.setAttribute("data-ov", "CardImg");
+  for (const pill of root.querySelectorAll(".wcard .pill")) pill.setAttribute("data-ov", "CardPill");
+  // case-study sidebar: the project facts scroll away; only the contents list + progress stay on screen
+  for (const aside of root.querySelectorAll("aside")) {
+    const kids = [...aside.children];
+    const i = kids.findIndex((k) => /^\s*contents/i.test(k.textContent));
+    if (i < 0) continue;
+    const box = outDoc.createElement("div");
+    box.setAttribute("data-ov", "StickyToc");
+    box.setAttribute("style", "display:flex;flex-direction:column;gap:14px");
+    kids[i].before(box);
+    for (const k of kids.slice(i)) box.appendChild(k);
+    // slightly tighter contents links so the whole list fits on a laptop screen
+    for (const a of box.querySelectorAll("a")) a.setAttribute("style", (a.getAttribute("style") || "").replace("padding:5px 0 5px 10px", "padding:3px 0 3px 10px"));
+  }
   // USPS before/after slider -> one code component; drop the range row
   for (const im of root.querySelectorAll("img")) {
     if (!/clip-path/.test(im.getAttribute("style") || "")) continue;

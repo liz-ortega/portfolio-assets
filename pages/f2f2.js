@@ -397,7 +397,7 @@
             if (dir === 'horizontal') cn.widthType = m.grow ? 3 : (m.pill && !m.explicitW && !m.wraps ? 2 : 0);
             else if (fillsCross) cn.widthType = 3;
             else if (m.pill && !m.explicitW && !m.wraps) cn.widthType = 2;
-            cn.heightType = m.explicitH ? 0 : 2;
+            cn.heightType = (m.fillH && dir === 'horizontal') ? 3 : (m.explicitH ? 0 : 2);
           } else if (dir === 'vertical' && fillsCross) cn.widthType = 3;
           else if (dir === 'horizontal' && m.grow) cn.widthType = 3;
         }
@@ -420,13 +420,17 @@
         const fillsBox = Math.abs(L) <= 1 && Math.abs(T) <= 1 && Math.abs(R) <= 1 && Math.abs(B) <= 1;
         if (fillsBox) { cn.left = 0; cn.top = 0; cn.right = 0; cn.bottom = 0; }
         else {
-          if (kcs.left === 'auto' && kcs.right !== 'auto') { cn.right = Math.round(R); cn.left = null; } else cn.left = Math.round(L);
-          if (kcs.top === 'auto' && kcs.bottom !== 'auto') { cn.bottom = Math.round(B); cn.top = null; } else cn.top = Math.round(T);
+          if (kcs.left === 'auto' && kcs.right !== 'auto') { cn.right = Math.round(R); cn.left = null; }
+          else if (kcs.left !== 'auto' && kcs.right !== 'auto' && !k.el.style.width) { cn.left = Math.round(L); cn.right = Math.round(R); cn.widthType = 0; }
+          else cn.left = Math.round(L);
+          if (kcs.top === 'auto' && kcs.bottom !== 'auto') { cn.bottom = Math.round(B); cn.top = null; }
+          else if (kcs.top !== 'auto' && kcs.bottom !== 'auto' && !k.el.style.height) { cn.top = Math.round(T); cn.bottom = Math.round(B); }
+          else cn.top = Math.round(T);
         }
         n.children.push(cn);
       }
       // a frame whose height is driven by content
-      const explicitH = el.style.height || el.style.minHeight || el.style.aspectRatio;
+      const explicitH = el.style.height || el.style.aspectRatio;
       n.heightType = explicitH ? 0 : 2;
       if (el.style.aspectRatio && r.height) n.aspectRatio = Math.round((r.width / r.height) * 10000) / 10000;
       if (!n.children.length) { n.layout = null; n.heightType = 0; }
@@ -434,13 +438,19 @@
     if (n.__class === 'FrameNode' && tag === 'A' && n.layout) applyBox(n, cs, el);
     if (n.__class === 'FrameNode') {
       const st = el.style || {};
-      META.set(n, Object.assign(META.get(n) || {}, { pill: cs.display.startsWith('inline') || (n.children.length <= 3 && n.children.every((c) => c.__class === 'RichTextNode' || c.fillType === 'image')), wraps: n.stackWrapEnabled, grow: parseFloat(cs.flexGrow) > 0 || (st.flex && /^[1-9]/.test(st.flex)), explicitW: !!(st.width || st.maxWidth || (st.flex && /px/.test(st.flex)) || st.aspectRatio), explicitH: !!(st.height || st.minHeight || st.aspectRatio) }));
+      META.set(n, Object.assign(META.get(n) || {}, { pill: cs.display.startsWith('inline') || (n.children.length <= 3 && n.children.every((c) => c.__class === 'RichTextNode' || c.fillType === 'image')), wraps: n.stackWrapEnabled, grow: parseFloat(cs.flexGrow) > 0 || (st.flex && /^[1-9]/.test(st.flex)), explicitW: !!(st.width || st.maxWidth || (st.flex && /px/.test(st.flex)) || st.aspectRatio), explicitH: !!(st.height || st.aspectRatio), fillH: !!(el.dataset && el.dataset.fillh) }));
+      // min-height becomes a Framer min height, so the frame still grows/shrinks with its content
+      if (/px$/.test(st.minHeight || '')) n.minHeight = Math.round(parseFloat(st.minHeight)) + 'px';
     } else if (!META.get(n)) META.set(n, {});
     if (n.__class === 'RichTextNode' && el.style && parseFloat(cs.flexGrow) > 0) META.get(n).grow = true;
     if (el.id && n.__class === 'FrameNode' && el.ownerDocument.querySelector('a[href="#' + el.id + '"]')) { n.elementId = el.id; n.scrollTargetEnabled = true; }
     if (/px$/.test(cs.maxWidth) && n.__class !== 'RichTextNode') n.maxWidth = Math.round(px(cs.maxWidth)) + 'px';
     if (el.dataset && el.dataset.rot) n.rotation = parseFloat(el.dataset.rot);
-    if (el.dataset && el.dataset.ov) { n.codeOverrideEnabled = true; n.codeOverrideIdentifier = OVPFX + 'with' + el.dataset.ov; }
+    if (el.dataset && el.dataset.ov) {
+      // text overrides must sit on the text layer itself, not on a padded box around it
+      const tgt = (/^(DogLine|PName|PTag|PFact|ModeHint)$/.test(el.dataset.ov) && n.__class === 'FrameNode' && n.children.length === 1 && n.children[0].__class === 'RichTextNode') ? n.children[0] : n;
+      tgt.codeOverrideEnabled = true; tgt.codeOverrideIdentifier = OVPFX + 'with' + el.dataset.ov;
+    }
     if (cs.position === 'sticky' && el.parentElement) {
       const beside = [...el.parentElement.children].some((c) => { if (c === el) return false; const q = c.getBoundingClientRect(); return q.height > 0 && q.top < r.bottom - 1 && q.bottom > r.top + 1; });
       if (beside) { n.position = 'sticky'; n.positionStickyTop = Math.round(px(cs.top)); }

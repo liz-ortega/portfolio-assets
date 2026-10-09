@@ -1,6 +1,6 @@
 // Interactions for Liz's portfolio: shared state + code overrides.
 import type { ComponentType } from "react"
-import { forwardRef, useEffect, useState, useSyncExternalStore } from "react"
+import { createContext, forwardRef, useContext, useEffect, useState, useSyncExternalStore } from "react"
 
 type S = { dog: number; pdog: number; filter: string; mode: string; col: number; face: number }
 let s: S = { dog: 0, pdog: 0, filter: "all", mode: "full", col: 0, face: 0 }
@@ -188,12 +188,40 @@ export function withFilterGame(C: any): ComponentType {
     return tap(() => ({ filter: "game" }), (s) => s.filter === "game", "#ECECF3")(C)
 }
 
+// work cards: the card tracks hover; its image zooms and its "view case study" pill fades in
+const Hover = createContext(false)
+const card = (pred: (s: S) => boolean) => (C: any): ComponentType =>
+    forwardRef((p: any, ref) => {
+        const st = useS()
+        const [h, setH] = useState(false)
+        if (!pred(st)) return null
+        return (
+            <Hover.Provider value={h}>
+                <C ref={ref} {...p} onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)} onFocus={() => setH(true)} onBlur={() => setH(false)} />
+            </Hover.Provider>
+        )
+    })
+
 export function withCatUx(C: any): ComponentType {
-    return show((s) => s.filter === "all" || s.filter === "ux")(C)
+    return card((s) => s.filter === "all" || s.filter === "ux")(C)
 }
 
 export function withCatGame(C: any): ComponentType {
-    return show((s) => s.filter === "all" || s.filter === "game")(C)
+    return card((s) => s.filter === "all" || s.filter === "game")(C)
+}
+
+export function withCardImg(C: any): ComponentType {
+    return forwardRef((p: any, ref) => {
+        const h = useContext(Hover)
+        return <C ref={ref} {...p} animate={{ scale: h ? 1.04 : 1 }} transition={{ duration: 0.4, ease: "easeOut" }} />
+    })
+}
+
+export function withCardPill(C: any): ComponentType {
+    return forwardRef((p: any, ref) => {
+        const h = useContext(Hover)
+        return <C ref={ref} {...p} initial={false} animate={{ opacity: h ? 1 : 0, y: h ? 0 : 6 }} transition={{ duration: 0.2 }} />
+    })
 }
 
 export function withToSpeed(C: any): ComponentType {
@@ -316,7 +344,7 @@ export function withStickyToc(C: any): ComponentType {
             m.addEventListener("change", on)
             return () => m.removeEventListener("change", on)
         }, [])
-        const extra = wide ? { position: "sticky", top: 24, alignSelf: "flex-start" } : {}
+        const extra = wide ? { position: "sticky", top: 24, zIndex: 2 } : {}
         return <C ref={ref} {...p} style={{ ...p.style, ...extra }} />
     })
 }
