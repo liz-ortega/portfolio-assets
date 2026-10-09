@@ -113,7 +113,7 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
     for (const a of node.attributes) {
       if (a.name === "onclick" || a.name === "onClick") { const ov = clickOv(holeName(a.value), node, scope); if (ov) el.setAttribute("data-ov", ov); continue; }
       if (/^on[A-Z]/.test(a.name) || /^on[a-z]+$/.test(a.name)) continue;
-      if (a.name.startsWith("hint-")) continue;
+      if (a.name.startsWith("hint-") || a.name === "loading") continue;
       let v = a.value.includes("{{") ? interp(a.value, scope) : a.value;
       if (typeof v === "function" || v === undefined || v === false || v === null) continue;
       if (v === true) v = "";
