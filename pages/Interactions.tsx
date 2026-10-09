@@ -1,6 +1,6 @@
 // Interactions for Liz's portfolio: shared state + code overrides.
 import type { ComponentType } from "react"
-import { useSyncExternalStore } from "react"
+import { forwardRef, useSyncExternalStore } from "react"
 
 type S = { dog: number; pdog: number; filter: string; mode: string; col: number; face: number }
 let s: S = { dog: 0, pdog: 0, filter: "all", mode: "full", col: 0, face: 0 }
@@ -23,15 +23,16 @@ const DOGS = [{"name": "Chiquis", "line": "hi, i'm chiquis! click a project to s
 const PDOGS = [{"name": "Chiquis", "tag": "MAIN · GOOD GIRL", "fact": "white with a little cream. the main character, so you'll spot her all over the site."}, {"name": "Candy", "tag": "GOOD GIRL", "fact": "mostly white and [a fun fact about Candy]."}, {"name": "Olaf", "tag": "GOOD BOY", "fact": "mostly white, like his name, and [a fun fact about Olaf]."}, {"name": "Buddy", "tag": "GOOD BOY", "fact": "spotted like a cow. [a fun fact about Buddy]."}, {"name": "Minnie", "tag": "GOOD GIRL", "fact": "black with white paws. [a fun fact about Minnie]."}, {"name": "Chochis", "tag": "GOOD BOY", "fact": "brown with a slightly blue-ish coat. [a fun fact about Chochis]."}]
 
 // show the layer only when pred(state) is true
-const show = (pred: (s: S) => boolean) => (C: any): ComponentType => (p: any) => {
-    const st = useS()
-    return pred(st) ? <C {...p} /> : null
-}
+const show = (pred: (s: S) => boolean) => (C: any): ComponentType =>
+    forwardRef((p: any, ref) => {
+        const st = useS()
+        return pred(st) ? <C ref={ref} {...p} /> : null
+    })
 // clickable layer that updates state and highlights itself when active
 const tap =
     (patch: (s: S) => Partial<S>, active: ((s: S) => boolean) | null, on = "#FFFFFF", off = "rgba(0,0,0,0)", ring = false) =>
     (C: any): ComponentType =>
-    (p: any) => {
+    forwardRef((p: any, ref) => {
         const st = useS()
         const a = active ? active(st) : null
         const extra: any = { cursor: "pointer" }
@@ -44,12 +45,13 @@ const tap =
                 extra.background = a ? on : off
             }
         }
-        return <C {...p} style={{ ...p.style, ...extra }} onTap={() => set(patch(st))} />
-    }
-const text = (fn: (s: S) => string) => (C: any): ComponentType => (p: any) => {
-    const st = useS()
-    return <C {...p} text={fn(st)} />
-}
+        return <C ref={ref} {...p} style={{ ...p.style, ...extra }} onTap={() => set(patch(st))} />
+    })
+const text = (fn: (s: S) => string) => (C: any): ComponentType =>
+    forwardRef((p: any, ref) => {
+        const st = useS()
+        return <C ref={ref} {...p} text={fn(st)} />
+    })
 
 export function withDog0(C: any): ComponentType {
     return show((s) => s.dog === 0)(C)
