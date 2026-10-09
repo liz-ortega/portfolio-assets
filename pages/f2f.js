@@ -43,7 +43,7 @@
     if (ls) v.push(`--framer-letter-spacing: ${Math.round((ls / fs) * 1000) / 1000}em`);
     if (cs.textTransform && cs.textTransform !== 'none') v.push(`--framer-text-transform: ${cs.textTransform}`);
     if (cs.textDecorationLine && cs.textDecorationLine.includes('underline')) v.push('--framer-text-decoration: underline');
-    return v.join('; ');
+    return v.join('; ').replace(/"/g, '&quot;');
   };
   const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const INLINE = new Set(['SPAN', 'EM', 'STRONG', 'B', 'I', 'A', 'BR', 'SMALL', 'CODE', 'SUP', 'SUB', 'U', 'MARK', 'ABBR', 'TIME', 'S']);
