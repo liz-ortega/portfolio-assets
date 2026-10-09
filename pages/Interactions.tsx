@@ -45,7 +45,7 @@ const tap =
                 extra.background = a ? on : off
             }
         }
-        return <C ref={ref} {...p} style={{ ...p.style, ...extra }} onTap={() => set(patch(st))} />
+        return <C ref={ref} {...p} style={{ ...p.style, ...extra }} onClick={() => set(patch(st))} />
     })
 // recolor a layer based on state
 const paint = (active: (s: S) => boolean, on: string, off: string) => (C: any): ComponentType =>

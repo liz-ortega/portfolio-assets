@@ -331,7 +331,7 @@
           const off = Math.round(built[0].r[main] - (r[main] + (dir === 'vertical' ? pt : pl)));
           if (off >= 2) { if (dir === 'vertical') n.paddingTop += off; else n.paddingLeft += off; n.paddingPerSide = true; }
         }
-        const rmap = new Map(built.map((b) => [b.n, b.r])); built.length = 0; out.forEach((x) => built.push({ n: x, r: rmap.get(x) }));
+        const rmap = new Map(built.map((b) => [b.n, b])); built.length = 0; out.forEach((x) => { const o = rmap.get(x); built.push({ n: x, r: o && o.r, el: o && o.el }); });
         // cross-axis centering for auto-margin children (block layouts)
         if (!disp.includes('flex') && !inlineRow) {
           const cands = built.filter((b) => b.r && b.n.name !== 'Spacer');
@@ -356,6 +356,12 @@
           } else if (dir === 'vertical' && fillsCross) cn.widthType = 3;
           else if (dir === 'horizontal' && m.grow) cn.widthType = 3;
         }
+      }
+      // centred max-width blocks (margin: 0 auto)
+      if (dir === 'vertical' && n.layout === 'stack') {
+        const autoM = (b) => b.el && b.el.style && (/auto/.test(b.el.style.margin || '') || b.el.style.marginLeft === 'auto');
+        const real = built.filter((b) => b.n.name !== 'Spacer');
+        if (real.some(autoM) && real.every((b) => autoM(b) || b.n.widthType === 3)) n.stackAlignment = 'center';
       }
       for (const b of built) n.children.push(b.n);
       // absolute children
