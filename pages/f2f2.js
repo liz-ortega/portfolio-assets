@@ -238,7 +238,7 @@
       n.padding = Math.round(pt); n.paddingTop = Math.round(pt); n.paddingRight = Math.round(pr); n.paddingBottom = Math.round(pb); n.paddingLeft = Math.round(pl);
       n.paddingPerSide = !(pt === pr && pr === pb && pb === pl);
       const t = textNode(el, { width: r.width - pl - pr, height: r.height - pt - pb }, cs, inlineHTML(el, cs));
-      t.id = idFor(el, 't'); t.widthType = 3; t.width = 1; t.heightType = 2;
+      t.id = idFor(el, 't'); t.widthType = 3; t.width = Math.ceil(r.width - pl - pr) + 2; t.heightType = 2;
       META.set(t, Object.assign(META.get(t) || {}, {}));
       n.children.push(t);
       n.heightType = 2;
