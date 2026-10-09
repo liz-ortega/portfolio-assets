@@ -217,6 +217,12 @@
     if (el.dataset.cc === 'BeforeAfter') {
       n = ccNode(el, r, 'BeforeAfter', { before: el.dataset.before, after: el.dataset.after, beforeAlt: el.dataset.beforeAlt || 'Before', afterAlt: el.dataset.afterAlt || 'After', radius: radiusOf() });
       assets.add(el.dataset.before); assets.add(el.dataset.after);
+    } else if (el.dataset.cc === 'ScrollImage') {
+      const im = el.querySelector('img');
+      n = ccNode(el, r, 'ScrollImage', { src: im.currentSrc || im.src, alt: im.alt || '', radius: radiusOf(), border: color(cs.borderTopColor) && px(cs.borderTopWidth) ? cs.borderTopColor : 'rgba(0,0,0,0)' });
+      delete n.aspectRatio; n.heightType = 0; n.height = Math.round(r.height);
+      n.$control__border.type = 'color';
+      assets.add(im.currentSrc || im.src);
     } else if (tag === 'IMG') n = imageNode(el, r, cs, el.currentSrc || el.src, el.alt ? el.alt.slice(0, 40) : 'Image');
     else if (tag === 'VIDEO') {
       const bg = color(cs.backgroundColor) || 'rgba(0,0,0,0)';
@@ -240,6 +246,11 @@
       const t = textNode(el, { width: r.width - pl - pr, height: r.height - pt - pb }, cs, inlineHTML(el, cs));
       t.id = idFor(el, 't'); t.widthType = 3; t.width = Math.ceil(r.width - pl - pr) + 2; t.heightType = 2;
       META.set(t, Object.assign(META.get(t) || {}, {}));
+      // one-line label (pill/badge): let the box hug its text so it never wraps if Framer's font is wider
+      const lhv = cs.lineHeight === 'normal' ? px(cs.fontSize) * 1.3 : px(cs.lineHeight);
+      if (r.height - pt - pb <= lhv * 1.5 && !(cs.display === 'block' && el.parentElement && getComputedStyle(el.parentElement).display === 'block')) {
+        t.widthType = 2; n.widthType = 2; META.set(n, Object.assign(META.get(n) || {}, { hug: true }));
+      }
       n.children.push(t);
       n.heightType = 2;
     } else {
@@ -402,7 +413,8 @@
       for (const k of abs) {
         const kr = k.el.getBoundingClientRect();
         const cn = build(k.el, null); if (!cn) continue;
-        cn.position = 'absolute'; cn.widthType = 0; cn.heightType = cn.__class === 'RichTextNode' ? 2 : 0;
+        const hug = (META.get(cn) || {}).hug;
+        cn.position = 'absolute'; cn.widthType = hug ? 2 : 0; cn.heightType = (hug || cn.__class === 'RichTextNode') ? 2 : 0;
         const kcs = getComputedStyle(k.el);
         const L = kr.left - r.left, T = kr.top - r.top, R = r.right - kr.right, B = r.bottom - kr.bottom;
         const fillsBox = Math.abs(L) <= 1 && Math.abs(T) <= 1 && Math.abs(R) <= 1 && Math.abs(B) <= 1;

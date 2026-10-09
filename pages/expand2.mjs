@@ -62,7 +62,7 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
       const t = node.textContent;
       if (t.includes("{{")) {
         for (const [k, ov] of Object.entries(textOv)) if (t.includes("{{" + k + "}}") && parent.nodeType === 1) parent.setAttribute("data-ov", ov);
-        parent.appendChild(outDoc.createTextNode(interp(t, scope)));
+        parent.appendChild(outDoc.createTextNode(String(interp(t, scope)).replace(/&amp;/g, "&")));
       } else parent.appendChild(outDoc.createTextNode(t));
       return;
     }
@@ -138,6 +138,11 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
     box.setAttribute("data-before", imgs[0].getAttribute("src")); box.setAttribute("data-after", imgs[1].getAttribute("src"));
     box.setAttribute("data-before-alt", imgs[0].getAttribute("alt") || "Before"); box.setAttribute("data-after-alt", imgs[1].getAttribute("alt") || "After");
   }
+  // tall image in a scroll box -> ScrollImage code component
+  for (const d of root.querySelectorAll("div")) {
+    const st = d.getAttribute("style") || "";
+    if (/overflow-y:\s*auto/.test(st) && d.children.length === 1 && d.children[0].tagName === "IMG") d.setAttribute("data-cc", "ScrollImage");
+  }
   for (const r of root.querySelectorAll('input[type="range"]')) { const l = r.closest("label") || r; l.setAttribute("data-skip", "1"); }
   let body = root.innerHTML.replace(/\/_blob\/([0-9a-f]{32})/g, (m, id) => ASSET + id + "__EXT__");
   return "<!doctype html><html><head><meta charset='utf-8'></head><body style='margin:0'>" + body + "</body></html>";
@@ -148,9 +153,12 @@ let tweaked = html;
 // small layout tweaks for Framer: keep the three sticky notes on one row on desktop
 // Nodo: four insight cards read better as a 2 x 2 grid than 3 + 1
 if (page === "LATech") { const k = tweaked.indexOf("INSIGHT 01"); const j = tweaked.lastIndexOf("minmax(220px,1fr)", k); if (j > 0) tweaked = tweaked.slice(0, j) + "minmax(300px,1fr)" + tweaked.slice(j + 17); }
+// Home: drop the initials circles on testimonials until real photos are added
+if (page === "Main") tweaked = tweaked.replace(/<span style="width:44px;height:44px;flex:none;border-radius:50%;[^"]*">[A-Z]{1,3}<\/span>/g, "");
 if (page === "FixIt") tweaked = tweaked.split("width:190px;min-height:170px;padding:18px 16px").join("width:160px;min-height:150px;padding:16px 14px");
 if (page === "FixIt") tweaked = tweaked.split("flex:1 1 260px;padding:24px 22px").join("flex:1 1 220px;padding:24px 22px");
-const fixed = tweaked.replace(/([0-9a-f]{32})__EXT__/g, (m, id) => { const f = files.find((x) => x.startsWith(id)); return f || id; });
-fs.writeFileSync(out, fixed);
+const fixed = tweaked.replace(/([0-9a-f]{32})__EXT__/g, (m, id) => { if (id === "d24634e048a85b999b854bfeb1f5fe57") return "Ortega-Elizabeth-Resume.pdf"; const f = files.find((x) => x.startsWith(id)); return f || id; });
+const fixed2 = fixed.split("d24634e048a85b999b854bfeb1f5fe57.pdf").join("Ortega-Elizabeth-Resume.pdf");
+fs.writeFileSync(out, fixed2);
 console.log(out, fixed.length, (fixed.match(/\{\{/g) || []).length, "holes left", (fixed.match(/data-ov=/g) || []).length, "overrides");
 await b.close();

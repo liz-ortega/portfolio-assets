@@ -90,3 +90,28 @@ addPropertyControls(BeforeAfter, {
     afterAlt: { type: ControlType.String, title: "After alt" },
     radius: { type: ControlType.Number, title: "Radius", min: 0, max: 60 },
 })
+
+/**
+ * Scrollable image: a fixed-height box you can scroll through (for tall page mockups).
+ * @framerSupportedLayoutWidth any
+ * @framerSupportedLayoutHeight any
+ */
+export function ScrollImage(props) {
+    const { src, alt, radius, border } = props
+    return (
+        <div
+            tabIndex={0}
+            aria-label={alt ? alt + ", scroll to see the full page" : "Scroll to see the full image"}
+            style={{ width: "100%", height: "100%", overflowY: "auto", overscrollBehavior: "contain", borderRadius: radius, border: border ? "1px solid " + border : "none", background: "#FFFFFF", boxSizing: "border-box", WebkitOverflowScrolling: "touch" }}
+        >
+            <img src={src} alt={alt} style={{ display: "block", width: "100%", height: "auto" }} draggable={false} />
+        </div>
+    )
+}
+ScrollImage.defaultProps = { src: "", alt: "", radius: 18, border: "#E6E6EE" }
+addPropertyControls(ScrollImage, {
+    src: { type: ControlType.String, title: "Image URL" },
+    alt: { type: ControlType.String, title: "Alt text" },
+    radius: { type: ControlType.Number, title: "Radius", min: 0, max: 60 },
+    border: { type: ControlType.Color, title: "Border" },
+})
