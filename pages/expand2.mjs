@@ -148,6 +148,7 @@ let tweaked = html;
 // small layout tweaks for Framer: keep the three sticky notes on one row on desktop
 // Nodo: four insight cards read better as a 2 x 2 grid than 3 + 1
 if (page === "LATech") { const k = tweaked.indexOf("INSIGHT 01"); const j = tweaked.lastIndexOf("minmax(220px,1fr)", k); if (j > 0) tweaked = tweaked.slice(0, j) + "minmax(300px,1fr)" + tweaked.slice(j + 17); }
+if (page === "FixIt") tweaked = tweaked.split("width:190px;min-height:170px;padding:18px 16px").join("width:160px;min-height:150px;padding:16px 14px");
 if (page === "FixIt") tweaked = tweaked.split("flex:1 1 260px;padding:24px 22px").join("flex:1 1 220px;padding:24px 22px");
 const fixed = tweaked.replace(/([0-9a-f]{32})__EXT__/g, (m, id) => { const f = files.find((x) => x.startsWith(id)); return f || id; });
 fs.writeFileSync(out, fixed);
