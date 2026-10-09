@@ -47,6 +47,13 @@ const tap =
         }
         return <C ref={ref} {...p} style={{ ...p.style, ...extra }} onTap={() => set(patch(st))} />
     })
+// recolor a layer based on state
+const paint = (active: (s: S) => boolean, on: string, off: string) => (C: any): ComponentType =>
+    forwardRef((p: any, ref) => {
+        const st = useS()
+        const c = active(st) ? on : off
+        return <C ref={ref} {...p} style={{ ...p.style, backgroundColor: c, background: c }} />
+    })
 const text = (fn: (s: S) => string) => (C: any): ComponentType =>
     forwardRef((p: any, ref) => {
         const st = useS()
@@ -238,9 +245,17 @@ export function withFacePhoto(C: any): ComponentType {
 }
 
 export function withShowPixel(C: any): ComponentType {
-    return tap(() => ({ face: 0 }), (s) => s.face === 0, "#16151F", "rgba(22,21,31,0.3)")(C)
+    return tap(() => ({ face: 0 }), null)(C)
 }
 
 export function withShowPhoto(C: any): ComponentType {
-    return tap(() => ({ face: 1 }), (s) => s.face === 1, "#16151F", "rgba(22,21,31,0.3)")(C)
+    return tap(() => ({ face: 1 }), null)(C)
+}
+
+export function withDotPixel(C: any): ComponentType {
+    return paint((s) => s.face === 0, "#16151F", "rgba(22,21,31,0.3)")(C)
+}
+
+export function withDotPhoto(C: any): ComponentType {
+    return paint((s) => s.face === 1, "#16151F", "rgba(22,21,31,0.3)")(C)
 }
