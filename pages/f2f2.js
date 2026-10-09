@@ -423,6 +423,7 @@
     if (n.__class === 'RichTextNode' && el.style && parseFloat(cs.flexGrow) > 0) META.get(n).grow = true;
     if (el.id && n.__class === 'FrameNode' && el.ownerDocument.querySelector('a[href="#' + el.id + '"]')) { n.elementId = el.id; n.scrollTargetEnabled = true; }
     if (/px$/.test(cs.maxWidth) && n.__class !== 'RichTextNode') n.maxWidth = Math.round(px(cs.maxWidth)) + 'px';
+    if (el.dataset && el.dataset.rot) n.rotation = parseFloat(el.dataset.rot);
     if (el.dataset && el.dataset.ov) { n.codeOverrideEnabled = true; n.codeOverrideIdentifier = OVPFX + 'with' + el.dataset.ov; }
     if (cs.position === 'sticky' && el.parentElement) {
       const beside = [...el.parentElement.children].some((c) => { if (c === el) return false; const q = c.getBoundingClientRect(); return q.height > 0 && q.top < r.bottom - 1 && q.bottom > r.top + 1; });
@@ -460,6 +461,11 @@
     const prevCR = document.createRange.bind(document);
     document.createRange = () => doc.createRange();
     try {
+      // measure without rotations (rotated boxes report inflated sizes); re-apply as layer rotation
+      for (const e of doc.querySelectorAll('[style*="rotate"]')) {
+        const m = (e.getAttribute('style') || '').match(/rotate\((-?[\d.]+)deg\)/);
+        if (m && !e.dataset.rot) { e.dataset.rot = m[1]; e.style.transform = 'none'; }
+      }
       placeAlts(doc);
       const root = build(rootEl, null);
       delete root.position; root.left = null; root.top = null; root.widthType = 3; root.heightType = 2;
