@@ -3,10 +3,10 @@
 (() => {
   const RID = () => { const a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; let s = ''; for (let i = 0; i < 9; i++) s += a[Math.floor(Math.random() * a.length)]; return s; };
   const tplRoot = window.__pbj.layers.tree.root.children[0];
-  const FT = structuredClone(tplRoot); delete FT.children;
+  const FT = structuredClone(tplRoot); delete FT.children; delete FT.position;
   for (const k of ['duplicatedFrom', 'link', 'cursor', 'customCursorSmartComponentId', 'customCursorType', 'boxShadows', 'fillImage', 'fillImageOriginalName']) FT[k] = null;
   FT.boxShadows = []; FT.cursor = null; FT.customCursorType = null;
-  const TT = structuredClone(tplRoot.children.find((c) => c.__class === 'RichTextNode')); delete TT.children; TT.duplicatedFrom = null;
+  const TT = structuredClone(tplRoot.children.find((c) => c.__class === 'RichTextNode')); delete TT.children; delete TT.position; TT.duplicatedFrom = null;
   for (const k of Object.keys(TT)) if (k.startsWith('stylePreset')) delete TT[k];
 
   const FONTS = {
@@ -97,7 +97,7 @@
 
   const frame = (name, r, extra) => Object.assign(structuredClone(FT), {
     id: RID(), name, children: [], width: Math.round(r.width), height: Math.round(r.height),
-    widthType: 0, heightType: 0, position: 'relative', left: null, top: null, right: null, bottom: null,
+    widthType: 0, heightType: 0, left: null, top: null, right: null, bottom: null,
     fillEnabled: false, fillType: 'color', fillColor: 'rgba(0,0,0,0)', radius: 0, radiusTopLeft: 0, radiusTopRight: 0, radiusBottomLeft: 0, radiusBottomRight: 0, radiusPerCorner: false,
     borderEnabled: false, layout: null, gap: 0, padding: 0, paddingPerSide: false, paddingTop: 0, paddingRight: 0, paddingBottom: 0, paddingLeft: 0,
     opacity: 1, link: null, linkOpenInNewTab: false, stackWrapEnabled: false, intrinsicWidth: null, intrinsicHeight: null,
@@ -127,9 +127,9 @@
     const sh = cs.boxShadow;
     if (sh && sh !== 'none') {
       const m = sh.match(/(rgba?\([^)]*\))\s+(-?[\d.]+)px\s+(-?[\d.]+)px\s+([\d.]+)px(?:\s+(-?[\d.]+)px)?/);
-      if (m) n.boxShadows = [{ type: 'box', color: m[1], x: +m[2], y: +m[3], blur: +m[4], spread: +(m[5] || 0), inset: sh.includes('inset'), id: RID() }];
+      if (m && !sh.includes('inset')) n.boxShadows = [{ type: 'realistic', color: m[1], x: +m[2], y: +m[3], blur: +m[4], spread: +(m[5] || 0), inset: false, diffusion: 1, focus: 0.45, id: RID() }];
     }
-    if (cs.overflow === 'hidden' || cs.overflowX === 'hidden') n.clip = true;
+    if (cs.overflow === 'hidden' || cs.overflowX === 'hidden' || cs.overflow === 'clip') n.overflow = 'clip';
     const a = el.tagName === 'A' ? el : null;
     if (a && a.getAttribute('href')) {
       const u = mapHref(a.getAttribute('href'));
@@ -160,7 +160,7 @@
   const textNode = (el, r, cs, htmlInner, name) => {
     const n = Object.assign(structuredClone(TT), {
       id: RID(), name: name || null, children: [], width: Math.ceil(r.width) + 1, height: Math.ceil(r.height),
-      widthType: 0, heightType: 2, position: 'relative', left: null, top: null, right: null, bottom: null,
+      widthType: 0, heightType: 2, left: null, top: null, right: null, bottom: null,
       html: `<p dir="auto" style="${textVars(cs, true)}">${htmlInner}</p>`,
     });
     return n;
@@ -245,7 +245,6 @@
         const cols = cs.gridTemplateColumns.split(' ').filter((x) => x && x !== '/').length || 1;
         n.gridColumnCount = cols; n.gridColumnWidthType = 'minmax'; n.gridColumnMinWidth = 1; n.gridRowHeightType = 'auto';
         n.gridRowCount = Math.ceil(built.length / cols); n.gap = Math.round(colGap || rowGap); n.gridAlignment = 'start';
-        n.gridRowGap = Math.round(rowGap); n.gridColumnGap = Math.round(colGap);
         for (const b of built) { b.n.widthType = 3; b.n.gridItemFillCellWidth = true; b.n.gridItemFillCellHeight = false; if (b.n.__class === 'RichTextNode') b.n.heightType = 2; }
       } else {
         // measure gaps along main axis
@@ -256,7 +255,7 @@
         let g = cssGap;
         if (!disp.includes('flex') || n.stackWrapEnabled) g = n.stackWrapEnabled ? cssGap : (gaps.length ? Math.max(0, Math.min(...gaps)) : 0);
         n.gap = Math.round(Math.max(0, g));
-        if (n.stackWrapEnabled) { n.gap = Math.round(colGap || rowGap); n.stackGapX = Math.round(colGap); n.stackGapY = Math.round(rowGap); }
+        if (n.stackWrapEnabled) { n.gap = Math.round(colGap || rowGap); }
         const out = [];
         built.forEach((b, i) => {
           if (i > 0 && !n.stackWrapEnabled && n.stackDistribution === 'start') {
