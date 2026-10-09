@@ -248,7 +248,7 @@
       META.set(t, Object.assign(META.get(t) || {}, {}));
       // one-line label (pill/badge): let the box hug its text so it never wraps if Framer's font is wider
       const lhv = cs.lineHeight === 'normal' ? px(cs.fontSize) * 1.3 : px(cs.lineHeight);
-      if (r.height - pt - pb <= lhv * 1.5 && !(cs.display === 'block' && el.parentElement && getComputedStyle(el.parentElement).display === 'block')) {
+      if (r.height - pt - pb <= lhv * 1.5 && (cs.position === 'absolute' || !(cs.display === 'block' && el.parentElement && getComputedStyle(el.parentElement).display === 'block'))) {
         t.widthType = 2; n.widthType = 2; META.set(n, Object.assign(META.get(n) || {}, { hug: true }));
       }
       n.children.push(t);
