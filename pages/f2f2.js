@@ -61,11 +61,16 @@
   const linkOf = (el) => { const a = el.closest('a[href]'); return a ? a : null; };
   let PAGEMAP = window.__pagemap || {};
   let PAGEIDS = window.__pageids || {};
+  let CURDOC = null, CURPAGE = null;
   // returns a Framer link object or null
   const mapLink = (href) => {
     if (!href) return null;
     if (/^(mailto:|tel:)/.test(href)) return { type: 'url', url: href };
-    if (href.startsWith('#')) return null;
+    if (href.startsWith('#')) {
+      const t = CURDOC && href.length > 1 && CURDOC.getElementById(href.slice(1));
+      if (!t || !CURPAGE || href === '#top') return null;
+      return { webPageId: CURPAGE, hash: idFor(t), hashVariables: {}, type: 'webPage' };
+    }
     const m = href.match(/^([A-Za-z]+)\.dc\.html(#.*)?$/);
     if (m) {
       if (PAGEIDS[m[1]]) return { webPageId: PAGEIDS[m[1]], type: 'webPage' };
@@ -248,7 +253,12 @@
         const kcs = getComputedStyle(k.el);
         if (kcs.position === 'absolute' || kcs.position === 'fixed') abs.push(k); else inflow.push(k);
       }
-      // collapse "display: contents"/inline wrappers is skipped for simplicity
+      // inline content on one line (e.g. a small badge followed by text) -> horizontal row
+      let inlineRow = false;
+      if (!disp.includes('flex') && !isGrid && inflow.length > 1 && inflow.every((k) => k.text || /^inline/.test(getComputedStyle(k.el).display))) {
+        const rs = inflow.map((k) => (k.text ? k.r : k.el.getBoundingClientRect()));
+        if (Math.max(...rs.map((x) => x.top)) < Math.min(...rs.map((x) => x.bottom))) { dir = 'horizontal'; inlineRow = true; }
+      }
       n.layout = isGrid ? 'grid' : 'stack';
       n.stackDirection = dir;
       n.padding = Math.round(pt); n.paddingTop = Math.round(pt); n.paddingRight = Math.round(pr); n.paddingBottom = Math.round(pb); n.paddingLeft = Math.round(pl);
@@ -265,7 +275,8 @@
           if (dir === 'horizontal' && new Set(tops.map((t) => Math.round(t / 8))).size <= 1) n.stackWrapEnabled = false;
           if (dir === 'vertical' && new Set(lefts.map((t) => Math.round(t / 8))).size <= 1) n.stackWrapEnabled = false;
         }
-      } else { n.stackAlignment = cs.textAlign === 'center' ? 'center' : 'start'; n.stackDistribution = 'start'; }
+      } else if (inlineRow) { n.stackAlignment = 'center'; n.stackDistribution = cs.textAlign === 'center' ? 'center' : 'start'; }
+      else { n.stackAlignment = cs.textAlign === 'center' ? 'center' : 'start'; n.stackDistribution = 'start'; }
       const rowGap = px(cs.rowGap), colGap = px(cs.columnGap);
       // build children
       const built = [];
@@ -322,7 +333,7 @@
         }
         const rmap = new Map(built.map((b) => [b.n, b.r])); built.length = 0; out.forEach((x) => built.push({ n: x, r: rmap.get(x) }));
         // cross-axis centering for auto-margin children (block layouts)
-        if (!disp.includes('flex')) {
+        if (!disp.includes('flex') && !inlineRow) {
           const cands = built.filter((b) => b.r && b.n.name !== 'Spacer');
           const centered = cands.filter((b) => { const l = b.r.left - (r.left + pl), rr2 = (r.right - pr) - b.r.right; return Math.abs(l - rr2) <= 2 && l > 2; });
           if (centered.length && centered.length === cands.filter((b) => Math.abs(b.n.width - contentW) > 2).length) n.stackAlignment = 'center';
@@ -374,9 +385,13 @@
       META.set(n, Object.assign(META.get(n) || {}, { pill: cs.display.startsWith('inline') || (n.children.length <= 3 && n.children.every((c) => c.__class === 'RichTextNode' || c.fillType === 'image')), wraps: n.stackWrapEnabled, grow: parseFloat(cs.flexGrow) > 0 || (st.flex && /^[1-9]/.test(st.flex)), explicitW: !!(st.width || st.maxWidth || (st.flex && /px/.test(st.flex)) || st.aspectRatio), explicitH: !!(st.height || st.minHeight || st.aspectRatio) }));
     } else if (!META.get(n)) META.set(n, {});
     if (n.__class === 'RichTextNode' && el.style && parseFloat(cs.flexGrow) > 0) META.get(n).grow = true;
+    if (el.id && n.__class === 'FrameNode' && el.ownerDocument.querySelector('a[href="#' + el.id + '"]')) { n.elementId = el.id; n.scrollTargetEnabled = true; }
     if (/px$/.test(cs.maxWidth) && n.__class !== 'RichTextNode') n.maxWidth = Math.round(px(cs.maxWidth)) + 'px';
     if (el.dataset && el.dataset.ov) { n.codeOverrideEnabled = true; n.codeOverrideIdentifier = OVPFX + 'with' + el.dataset.ov; }
-    if (cs.position === 'sticky') { n.position = 'sticky'; n.positionStickyTop = Math.round(px(cs.top)); }
+    if (cs.position === 'sticky' && el.parentElement) {
+      const beside = [...el.parentElement.children].some((c) => { if (c === el) return false; const q = c.getBoundingClientRect(); return q.height > 0 && q.top < r.bottom - 1 && q.bottom > r.top + 1; });
+      if (beside) { n.position = 'sticky'; n.positionStickyTop = Math.round(px(cs.top)); }
+    }
     return n;
   };
 
@@ -444,7 +459,7 @@
         const a = dn[k], b = xn[k];
         if (JSON.stringify(a) !== JSON.stringify(b) && b !== undefined) o[k] = b;
       }
-      if (dn.position === 'sticky' && xn.position !== 'sticky') { /* keep sticky; harmless */ }
+      if (dn.position === 'sticky' && xn.position !== 'sticky') o.position = null;
       if (Object.keys(o).length) out[id] = o;
     }
     return out;
@@ -452,7 +467,7 @@
 
   // Build the page at several widths; returns the desktop tree plus per-breakpoint overrides
   window.__f2f = async (doc, rootEl, opts = {}) => {
-    IDS = new WeakMap(); SEQ = 0; PFX = opts.pfx || 'pg';
+    IDS = new WeakMap(); SEQ = 0; PFX = opts.pfx || 'pg'; CURDOC = doc; CURPAGE = opts.pageId || null;
     assets.clear();
     const ifr = doc.defaultView.frameElement;
     const widths = opts.widths || [1200, 810, 390];

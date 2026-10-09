@@ -1,6 +1,6 @@
 // Interactions for Liz's portfolio: shared state + code overrides.
 import type { ComponentType } from "react"
-import { forwardRef, useSyncExternalStore } from "react"
+import { forwardRef, useEffect, useState, useSyncExternalStore } from "react"
 
 type S = { dog: number; pdog: number; filter: string; mode: string; col: number; face: number }
 let s: S = { dog: 0, pdog: 0, filter: "all", mode: "full", col: 0, face: 0 }
@@ -258,4 +258,49 @@ export function withDotPixel(C: any): ComponentType {
 
 export function withDotPhoto(C: any): ComponentType {
     return paint((s) => s.face === 1, "#16151F", "rgba(22,21,31,0.3)")(C)
+}
+
+// reading progress for the case-study sidebar
+function useScrollPct() {
+    const [pct, setPct] = useState(0)
+    useEffect(() => {
+        const on = () => {
+            const max = document.documentElement.scrollHeight - window.innerHeight
+            setPct(max > 0 ? Math.min(100, Math.max(0, Math.round((window.scrollY / max) * 100))) : 0)
+        }
+        on()
+        window.addEventListener("scroll", on, { passive: true })
+        window.addEventListener("resize", on)
+        return () => {
+            window.removeEventListener("scroll", on)
+            window.removeEventListener("resize", on)
+        }
+    }, [])
+    return pct
+}
+
+export function withProgressBar(C: any): ComponentType {
+    return forwardRef((p: any, ref) => {
+        const pct = useScrollPct()
+        return <C ref={ref} {...p} style={{ ...p.style, width: Math.max(2, pct) + "%", transition: "width .15s linear" }} />
+    })
+}
+
+const progressText = (level: string) => (C: any): ComponentType =>
+    forwardRef((p: any, ref) => {
+        const pct = useScrollPct()
+        return <C ref={ref} {...p} text={pct + "% · LEVEL " + level} />
+    })
+
+export function withProgress01(C: any): ComponentType {
+    return progressText("01")(C)
+}
+export function withProgress02(C: any): ComponentType {
+    return progressText("02")(C)
+}
+export function withProgress03(C: any): ComponentType {
+    return progressText("03")(C)
+}
+export function withProgress04(C: any): ComponentType {
+    return progressText("04")(C)
 }
