@@ -250,7 +250,26 @@
         if (!cn) continue;
         built.push({ n: cn, r: kr, el: kel });
       }
-      if (isGrid) {
+      const multicol = (cs.columnCount !== 'auto' || cs.columnWidth !== 'auto') && built.length > 1;
+      if (multicol) {
+        const groups = new Map();
+        for (const b of built) { const k = Math.round(b.r.left / 4); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(b); }
+        const cols = [...groups.entries()].sort((a, b) => a[0] - b[0]).map(([, v]) => v);
+        n.layout = 'stack'; n.stackDirection = 'horizontal'; n.stackAlignment = 'start'; n.stackDistribution = 'start';
+        n.gap = Math.round(px(cs.columnGap) || 16);
+        for (const col of cols) {
+          col.sort((a, b) => a.r.top - b.r.top);
+          const cr = { width: col[0].r.width, height: col[col.length - 1].r.bottom - col[0].r.top };
+          const cf = frame('Column', cr);
+          cf.layout = 'stack'; cf.stackDirection = 'vertical'; cf.stackAlignment = 'start'; cf.stackDistribution = 'start';
+          let g = 16; if (col.length > 1) g = Math.max(0, Math.round(col[1].r.top - col[0].r.bottom));
+          cf.gap = g; cf.widthType = 3; cf.heightType = 2;
+          for (const b of col) { b.n.widthType = 3; if (b.n.layout) b.n.heightType = 2; cf.children.push(b.n); }
+          META.set(cf, { grow: true });
+          n.children.push(cf);
+        }
+        built.length = 0;
+      } else if (isGrid) {
         const cols = cs.gridTemplateColumns.split(' ').filter((x) => x && x !== '/').length || 1;
         n.gridColumnCount = cols; n.gridColumnWidthType = 'minmax'; n.gridColumnMinWidth = 10; n.gridColumnWidth = 10; n.gridRowHeightType = 'auto';
         n.gridRowCount = Math.ceil(built.length / cols); n.gap = Math.round(colGap || rowGap); n.gridAlignment = 'start';
