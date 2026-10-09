@@ -121,7 +121,7 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
     }
     // About: indicator dots get their own style overrides
     if (tag === "span" && /\{\{dot([01])\}\}/.test(node.getAttribute("style") || "")) el.setAttribute("data-ov", /dot0/.test(node.getAttribute("style")) ? "DotPixel" : "DotPhoto");
-    if (tag === "aside") el.setAttribute("style", (el.getAttribute("style") || "") + ";position:sticky;top:24px;align-self:flex-start");
+    if (tag === "aside") { el.setAttribute("data-ov", "StickyToc"); el.setAttribute("style", (el.getAttribute("style") || "") + ";align-self:flex-start"); }
     if (tag === "div" && /^width:\s*8%;height:100%/.test(node.getAttribute("style") || "")) el.setAttribute("data-ov", "ProgressBar");
     if (tag === "span" && /^\s*\d+% · LEVEL (\d+)\s*$/.test(node.textContent)) el.setAttribute("data-ov", "Progress" + node.textContent.match(/LEVEL (\d+)/)[1]);
     if (tag === "helmet") el.setAttribute("data-helmet", "1");

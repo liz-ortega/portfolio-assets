@@ -304,3 +304,19 @@ export function withProgress03(C: any): ComponentType {
 export function withProgress04(C: any): ComponentType {
     return progressText("04")(C)
 }
+
+// keep the case-study contents panel on screen on wide layouts (where it sits beside the article)
+export function withStickyToc(C: any): ComponentType {
+    return forwardRef((p: any, ref) => {
+        const [wide, setWide] = useState(false)
+        useEffect(() => {
+            const m = window.matchMedia("(min-width: 1200px)")
+            const on = () => setWide(m.matches)
+            on()
+            m.addEventListener("change", on)
+            return () => m.removeEventListener("change", on)
+        }, [])
+        const extra = wide ? { position: "sticky", top: 24, alignSelf: "flex-start" } : {}
+        return <C ref={ref} {...p} style={{ ...p.style, ...extra }} />
+    })
+}
