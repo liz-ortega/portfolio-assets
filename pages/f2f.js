@@ -296,9 +296,9 @@
             else if (m.singleLine) cn.widthType = 2;
             else cn.width = cn.width + 2;
           } else if (cn.fillType !== 'image' && cn.layout) {
-            if (dir === 'horizontal') cn.widthType = m.grow ? 3 : (m.explicitW || m.wraps ? 0 : 2);
+            if (dir === 'horizontal') cn.widthType = m.grow ? 3 : (m.pill && !m.explicitW && !m.wraps ? 2 : 0);
             else if (fillsCross) cn.widthType = 3;
-            else if (!m.explicitW && !m.wraps) cn.widthType = 2;
+            else if (m.pill && !m.explicitW && !m.wraps) cn.widthType = 2;
             cn.heightType = m.explicitH ? 0 : 2;
           } else if (dir === 'vertical' && fillsCross) cn.widthType = 3;
           else if (dir === 'horizontal' && m.grow) cn.widthType = 3;
@@ -320,7 +320,7 @@
     if (n.__class === 'FrameNode' && tag === 'A' && n.layout) applyBox(n, cs, el);
     if (n.__class === 'FrameNode') {
       const st = el.style || {};
-      META.set(n, Object.assign(META.get(n) || {}, { wraps: n.stackWrapEnabled, grow: parseFloat(cs.flexGrow) > 0 || (st.flex && /^[1-9]/.test(st.flex)), explicitW: !!(st.width || st.maxWidth || (st.flex && /px/.test(st.flex)) || st.aspectRatio), explicitH: !!(st.height || st.minHeight || st.aspectRatio) }));
+      META.set(n, Object.assign(META.get(n) || {}, { pill: cs.display.startsWith('inline') || (n.children.length <= 3 && n.children.every((c) => c.__class === 'RichTextNode' || c.fillType === 'image')), wraps: n.stackWrapEnabled, grow: parseFloat(cs.flexGrow) > 0 || (st.flex && /^[1-9]/.test(st.flex)), explicitW: !!(st.width || st.maxWidth || (st.flex && /px/.test(st.flex)) || st.aspectRatio), explicitH: !!(st.height || st.minHeight || st.aspectRatio) }));
     } else if (!META.get(n)) META.set(n, {});
     if (n.__class === 'RichTextNode' && el.style && parseFloat(cs.flexGrow) > 0) META.get(n).grow = true;
     return n;
