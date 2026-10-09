@@ -278,7 +278,13 @@
           const off = Math.round(built[0].r[main] - (r[main] + (dir === 'vertical' ? pt : pl)));
           if (off >= 2) { if (dir === 'vertical') n.paddingTop += off; else n.paddingLeft += off; n.paddingPerSide = true; }
         }
-        built.length = 0; out.forEach((x) => built.push({ n: x }));
+        const rmap = new Map(built.map((b) => [b.n, b.r])); built.length = 0; out.forEach((x) => built.push({ n: x, r: rmap.get(x) }));
+        // cross-axis centering for auto-margin children (block layouts)
+        if (!disp.includes('flex')) {
+          const cands = built.filter((b) => b.r && b.n.name !== 'Spacer');
+          const centered = cands.filter((b) => { const l = b.r.left - (r.left + pl), rr2 = (r.right - pr) - b.r.right; return Math.abs(l - rr2) <= 2 && l > 2; });
+          if (centered.length && centered.length === cands.filter((b) => Math.abs(b.n.width - contentW) > 2).length) n.stackAlignment = 'center';
+        }
         // sizing per child
         for (const b of built) {
           const cn = b.n; if (cn.name === 'Spacer') continue;
