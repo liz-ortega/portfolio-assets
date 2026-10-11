@@ -28,7 +28,7 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
   const ev = (expr, scope) => { try { return new Function("__s", "with(__s){return (" + expr + ")}")(scope); } catch (e) { return undefined; } };
   const interp = (str, scope) => {
     const whole = str.match(/^\s*\{\{([\s\S]+?)\}\}\s*$/);
-    if (whole) return ev(whole[1], scope);
+    if (whole) { const v = ev(whole[1], scope); if (typeof v !== "string" && typeof v !== "number") return v; const lead = str.match(/^\s*/)[0], trail = str.match(/\s*$/)[0]; return (lead ? " " : "") + v + (trail ? " " : ""); }
     return str.replace(/\{\{([\s\S]+?)\}\}/g, (m, e) => { const v = ev(e, scope); return v == null ? "" : String(v); });
   };
   const holeName = (s) => { const m = (s || "").match(/^\s*\{\{\s*([\w.]+)\s*\}\}\s*$/); return m ? m[1] : null; };
@@ -191,6 +191,7 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
 @media (max-width: 1199px) { [data-ov="StickyToc"] { display: none !important; } }
 @media (min-width: 1200px) { [data-m="oneline"] { white-space: nowrap; } }
 @media (max-width: 809px) {
+  section[style*="padding:96px"] { padding-top: 60px !important; padding-bottom: 60px !important; }
   [data-m="nav"] { flex-direction: column !important; justify-content: center !important; gap: 4px !important; padding: 8px 12px !important; }
   [data-m="navlinks"] { justify-content: center !important; flex-wrap: nowrap !important; gap: 0 !important; }
   [data-m="navlinks"] a.navlink { padding: 8px 8px !important; font-size: 14px !important; }
