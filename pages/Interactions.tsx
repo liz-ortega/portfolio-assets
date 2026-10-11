@@ -168,12 +168,13 @@ export function withPName(C: any): ComponentType {
     return text((s) => PDOGS[s.pdog].name)(C)
 }
 
+// Play page dog card shows only the name (tag and fun fact hidden)
 export function withPTag(C: any): ComponentType {
-    return text((s) => PDOGS[s.pdog].tag)(C)
+    return forwardRef(() => null)
 }
 
 export function withPFact(C: any): ComponentType {
-    return text((s) => PDOGS[s.pdog].fact)(C)
+    return forwardRef(() => null)
 }
 
 export function withFilterAll(C: any): ComponentType {
