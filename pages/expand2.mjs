@@ -180,9 +180,16 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
   // iPhones draw some arrows/triangles as colour emoji; ask for the plain text glyph instead
   const tw = outDoc.createTreeWalker(root, 4);
   for (let t = tw.nextNode(); t; t = tw.nextNode()) if (/[↗↖↘↙↔↕▶◀☀]/.test(t.data)) t.data = t.data.replace(/([↗↖↘↙↔↕▶◀☀])(?!︎)/g, "$1︎");
+  // "I research it, design it, and build it." on one line on desktop
+  for (const h of root.querySelectorAll("h2")) {
+    if (!/^\s*I research it, design it/.test(h.textContent)) continue;
+    h.setAttribute("data-m", "oneline");
+    const w = h.parentElement; w.setAttribute("style", (w.getAttribute("style") || "").replace("max-width:780px", "max-width:100%"));
+  }
   const mcss = outDoc.createElement("style");
   mcss.textContent = `
 @media (max-width: 1199px) { [data-ov="StickyToc"] { display: none !important; } }
+@media (min-width: 1200px) { [data-m="oneline"] { white-space: nowrap; } }
 @media (max-width: 809px) {
   [data-m="nav"] { flex-direction: column !important; justify-content: center !important; gap: 4px !important; padding: 8px 12px !important; }
   [data-m="navlinks"] { justify-content: center !important; flex-wrap: nowrap !important; gap: 0 !important; }
