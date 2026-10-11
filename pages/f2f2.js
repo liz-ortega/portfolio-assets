@@ -434,11 +434,14 @@
         const fillsBox = Math.abs(L) <= 1 && Math.abs(T) <= 1 && Math.abs(R) <= 1 && Math.abs(B) <= 1;
         if (fillsBox) { cn.left = 0; cn.top = 0; cn.right = 0; cn.bottom = 0; }
         else {
-          if (kcs.left === 'auto' && kcs.right !== 'auto') { cn.right = Math.round(R); cn.left = null; }
-          else if (kcs.left !== 'auto' && kcs.right !== 'auto' && !k.el.style.width) { cn.left = Math.round(L); cn.right = Math.round(R); cn.widthType = 0; }
+          // which sides the page actually anchors (inline style; computed values are always resolved to px)
+          const st = k.el.style, has = (v) => v !== '' && v !== 'auto';
+          const hl = has(st.left), hr = has(st.right), ht = has(st.top), hb = has(st.bottom);
+          if (hr && !hl) { cn.right = Math.round(R); cn.left = null; }
+          else if (hl && hr && !st.width) { cn.left = Math.round(L); cn.right = Math.round(R); cn.widthType = 0; }
           else cn.left = Math.round(L);
-          if (kcs.top === 'auto' && kcs.bottom !== 'auto') { cn.bottom = Math.round(B); cn.top = null; }
-          else if (kcs.top !== 'auto' && kcs.bottom !== 'auto' && !k.el.style.height) { cn.top = Math.round(T); cn.bottom = Math.round(B); }
+          if (hb && !ht) { cn.bottom = Math.round(B); cn.top = null; }
+          else if (ht && hb && !st.height) { cn.top = Math.round(T); cn.bottom = Math.round(B); }
           else cn.top = Math.round(T);
         }
         if (firstFlow && (k.el.compareDocumentPosition(firstFlow) & Node.DOCUMENT_POSITION_FOLLOWING)) n.children.splice(behind++, 0, cn);
