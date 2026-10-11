@@ -217,6 +217,9 @@
     if (el.dataset.cc === 'BeforeAfter') {
       n = ccNode(el, r, 'BeforeAfter', { before: el.dataset.before, after: el.dataset.after, beforeAlt: el.dataset.beforeAlt || 'Before', afterAlt: el.dataset.afterAlt || 'After', radius: radiusOf() });
       assets.add(el.dataset.before); assets.add(el.dataset.after);
+    } else if (['PosterWall', 'DioramaWalk', 'BrickDig', 'CastTable', 'Peephole'].includes(el.dataset.cc)) {
+      n = ccNode(el, r, el.dataset.cc, {});
+      delete n.aspectRatio; n.heightType = 2;
     } else if (el.dataset.cc === 'ScrollImage') {
       const im = el.querySelector('img');
       n = ccNode(el, r, 'ScrollImage', { src: im.currentSrc || im.src, alt: im.alt || '', radius: radiusOf(), border: color(cs.borderTopColor) && px(cs.borderTopWidth) ? cs.borderTopColor : 'rgba(0,0,0,0)' });

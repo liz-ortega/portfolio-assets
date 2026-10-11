@@ -197,11 +197,11 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
 @media (min-width: 1200px) { [data-m="oneline"] { white-space: nowrap; } }
 @media (max-width: 809px) {
   section[style*="padding:96px"] { padding-top: 60px !important; padding-bottom: 60px !important; }
-  [style*="flex-direction:row-reverse"] { flex-direction: column-reverse !important; align-items: stretch !important; }
+  [style*="flex-direction:row-reverse"] { flex-direction: column-reverse !important; align-items: stretch !important; flex-wrap: nowrap !important; }
   [data-m="nav"] { flex-direction: column !important; justify-content: center !important; gap: 4px !important; padding: 8px 12px !important; }
   [data-m="navlinks"] { justify-content: center !important; flex-wrap: nowrap !important; gap: 0 !important; }
   [data-m="navlinks"] a.navlink { padding: 8px 8px !important; font-size: 14px !important; }
-  [data-m="sayhi"] { margin-left: 6px !important; padding: 8px 13px !important; font-size: 14px !important; white-space: nowrap; }
+  [style*="flex-direction:row-reverse"] > * { flex: none !important; } [data-m="making"] { gap: 12px !important; flex-wrap: nowrap !important; } [data-m="making"] > figure { width: 72px !important; } [data-m="sayhi"] { margin-left: 6px !important; padding: 8px 13px !important; font-size: 14px !important; white-space: nowrap; }
 }`;
   root.insertBefore(mcss, root.firstChild);
   // USPS before/after slider -> one code component; drop the range row
