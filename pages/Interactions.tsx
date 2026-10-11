@@ -161,7 +161,7 @@ export function withBark(C: any): ComponentType {
 }
 
 export function withDogLine(C: any): ComponentType {
-    return text((s) => DOGS[s.dog].name + ": " + DOGS[s.dog].line)(C)
+    return text((s) => DOGS[s.dog].line)(C) // each line already says the dog's name
 }
 
 export function withPName(C: any): ComponentType {
