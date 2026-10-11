@@ -1,4 +1,11 @@
-<!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0">
+<!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0"><style>
+@media (max-width: 1199px) { [data-ov="StickyToc"] { display: none !important; } }
+@media (max-width: 809px) {
+  [data-m="nav"] { flex-direction: column !important; justify-content: center !important; gap: 4px !important; padding: 8px 12px !important; }
+  [data-m="navlinks"] { justify-content: center !important; flex-wrap: nowrap !important; gap: 0 !important; }
+  [data-m="navlinks"] a.navlink { padding: 8px 8px !important; font-size: 14px !important; }
+  [data-m="sayhi"] { margin-left: 6px !important; padding: 8px 13px !important; font-size: 14px !important; white-space: nowrap; }
+}</style>
 <div data-helmet="1">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Instrument+Sans:wght@400;500;600&amp;family=Silkscreen&amp;display=swap">
 <style>
@@ -18,17 +25,17 @@ a{color:#16151F}a:hover{color:#2569B8}
 </div>
 <div id="top" style="min-height:100vh;background:#FBFBFD;color:#16151F;font-family:'Instrument Sans', 'Avenir Next', 'Segoe UI', sans-serif;font-size:17px;line-height:1.6">
 <header style="position:relative;z-index:2;background:rgba(251,251,253,0.82);backdrop-filter:blur(10px);border-bottom:1px solid #E6E6EE">
-<nav style="max-width:1240px;margin:0 auto;padding:10px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
+<nav style="max-width:1240px;margin:0 auto;padding:10px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px" data-m="nav">
 <a href="Main.dc.html" style="display:flex;align-items:center;gap:10px;min-height:44px;text-decoration:none">
 <span class="bob" style="display:block"><img width="32" height="32" style="display:block" alt="" src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@9fc1f5dc0349b5bdaa6726964ac4f34be70c1fe2/svg/b4aed4425787b408087c7273da62268a.svg"></span>
 <span style="font-family:'Instrument Serif', 'Iowan Old Style', Georgia, serif;font-size:26px;line-height:1">elizabeth.</span>
 </a>
-<div style="display:flex;flex-wrap:wrap;align-items:center;gap:2px;font-size:15px">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:2px;font-size:15px" data-m="navlinks">
 <a class="navlink" href="Main.dc.html#work" style="padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:600"><span style="display:inline-block;width:7px;height:7px;background:#16151F;margin-right:7px;vertical-align:2px"></span>work</a>
 
 <a class="navlink" href="About.dc.html" style="padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:500">about</a>
 <a class="navlink" href="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@main/Ortega-Elizabeth-Resume.pdf" target="_blank" rel="noopener" style="padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:500">résumé ↓</a><a class="navlink" href="Play.dc.html" style="padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:500">play</a>
-<a href="https://calendly.com/elizabeth-michelle-ortega/coffee-chat" target="_blank" rel="noopener" style="margin-left:8px;padding:10px 16px;border-radius:999px;background:#16151F;color:#FFFFFF;text-decoration:none;font-weight:600">say hi →</a>
+<a href="https://calendly.com/elizabeth-michelle-ortega/coffee-chat" target="_blank" rel="noopener" style="margin-left:8px;padding:10px 16px;border-radius:999px;background:#16151F;color:#FFFFFF;text-decoration:none;font-weight:600" data-m="sayhi">say hi →</a>
 </div>
 </nav>
 </header>
@@ -61,7 +68,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <p style="margin:0;color:#3D3C52">I designed Nodo, an encrypted mobile app and structured organizing system that protects and empowers modern community activists, as the sole designer on a six-person team.</p>
 <div style="display:flex;flex-wrap:wrap;gap:8px">
 <span style="padding:10px 16px;border-radius:999px;background:#16151F;color:#FFFFFF;font-size:15px;font-weight:600">★ LA-Tech Innovation Award</span>
-<a href="https://nodo-one-phi.vercel.app/auth" target="_blank" rel="noopener" style="padding:10px 16px;border-radius:999px;border:1px solid #D5D5E0;background:#FFFFFF;text-decoration:none;font-size:15px">try the live prototype ↗</a>
+<a href="https://nodo-one-phi.vercel.app/auth" target="_blank" rel="noopener" style="padding:10px 16px;border-radius:999px;border:1px solid #D5D5E0;background:#FFFFFF;text-decoration:none;font-size:15px">try the live prototype ↗︎</a>
 </div>
 </div>
 <div style="flex:1 1 360px;aspect-ratio:4 / 3;border-radius:22px;background:linear-gradient(160deg,#9C84E0,#4B2F99);box-shadow:0 30px 60px rgba(75,47,153,.25);display:flex;align-items:center;justify-content:center;gap:16px;padding:28px">
@@ -90,7 +97,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <div style="display:flex;align-items:center;gap:14px"><span class="bob" style="display:block"><img width="40" height="40" style="display:block" alt="" src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@9fc1f5dc0349b5bdaa6726964ac4f34be70c1fe2/svg/1ec3bead34e03eed39ebb0a054a3b343.svg"></span><span style="font-size:15px" data-ov="ModeHint">in a hurry? switch to the 2-min speedrun.</span></div>
 <div style="display:flex;padding:4px;border-radius:999px;background:#F0F0F5;gap:4px">
 <button type="button" data-ov="ToSpeed" style="min-height:44px;padding:8px 16px;border:0;border-radius:999px;font:inherit;font-size:15px;cursor:pointer;background:transparent;font-weight:500;color:#16151F">» speedrun · 2 min</button>
-<button type="button" data-ov="ToFull" style="min-height:44px;padding:8px 16px;border:0;border-radius:999px;font:inherit;font-size:15px;cursor:pointer;background:#FFFFFF;font-weight:600;color:#16151F">▶ full playthrough</button>
+<button type="button" data-ov="ToFull" style="min-height:44px;padding:8px 16px;border:0;border-radius:999px;font:inherit;font-size:15px;cursor:pointer;background:#FFFFFF;font-weight:600;color:#16151F">▶︎ full playthrough</button>
 </div>
 </div>
 
@@ -102,7 +109,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <span style="font-family:'Silkscreen', 'Courier New', monospace;font-size:11px;color:#2569B8">VICTORY</span><span>Nodo, an encrypted organizing app with role-based permissions and data controls. Won the LA-Tech Innovation Award.</span></div>
 </div>
 <img src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@main/3e829f45c978b391a23136c2cd51c030.jpg" alt="Nodo key screens: My Groups with petitions, encrypted group chat, and Organizing Tools" style="display:block;width:100%;height:auto;border-radius:18px;">
-<button type="button" data-ov="GoFull" style="align-self:flex-start;min-height:48px;padding:13px 22px;border:0;border-radius:999px;background:#16151F;color:#FFFFFF;font:inherit;font-weight:600;cursor:pointer">want the details? full playthrough ▶</button>
+<button type="button" data-ov="GoFull" style="align-self:flex-start;min-height:48px;padding:13px 22px;border:0;border-radius:999px;background:#16151F;color:#FFFFFF;font:inherit;font-weight:600;cursor:pointer">want the details? full playthrough ▶︎</button>
 </div>
 
 
@@ -152,7 +159,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#5B5A6B">05 · solution</span><h2 style="margin:0;font-family:'Instrument Serif', 'Iowan Old Style', Georgia, serif;font-weight:400;font-size:clamp(34px,4vw,52px);line-height:1.05">research → framework → <em>working prototype.</em></h2>
 <p style="margin:0;max-width:640px;color:#3D3C52">I translated our research into a feature framework, mapped the journey for organizers and activists, then built and tested a functional, end-to-end prototype in Replit.</p>
 <div style="display:flex;flex-direction:column;gap:10px"><video src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@main/33296f805f727f16601f42e83a7361cf.mp4" poster="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@main/8192c80cede04c9a40d99d9bfde9133d.jpg" autoplay="" loop="" muted="" playsinline="" aria-label="Walkthrough of the Nodo prototype: guest entry, discovering groups, applying, encrypted chat, polls, petitions and roles" style="display:block;width:100%;height:auto;border-radius:20px"></video>
-<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center"><a href="https://nodo-one-phi.vercel.app/auth" target="_blank" rel="noopener" style="padding:10px 16px;border-radius:999px;background:#16151F;color:#FFFFFF;text-decoration:none;font-size:15px;font-weight:600">try the live prototype ↗</a><span style="font-size:13px;color:#5B5A6B">Click “Explore as a guest.” Everything in the demo is fictional and resets daily.</span></div></div>
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center"><a href="https://nodo-one-phi.vercel.app/auth" target="_blank" rel="noopener" style="padding:10px 16px;border-radius:999px;background:#16151F;color:#FFFFFF;text-decoration:none;font-size:15px;font-weight:600">try the live prototype ↗︎</a><span style="font-size:13px;color:#5B5A6B">Click “Explore as a guest.” Everything in the demo is fictional and resets daily.</span></div></div>
 </article>
 
 <article id="flow" style="display:flex;flex-direction:column;gap:64px">
@@ -222,7 +229,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <h2 style="margin:0;font-family:'Instrument Serif', 'Iowan Old Style', Georgia, serif;font-weight:400;font-size:clamp(44px,6vw,80px);line-height:1">Every good product has a little <em style="color:#F4A7C0">play</em> in it.</h2>
 <div style="display:flex;flex-wrap:wrap;gap:10px">
 <a href="mailto:elizabeth.michelle.ortega@gmail.com" target="_blank" rel="noopener" title="elizabeth.michelle.ortega@gmail.com" style="padding:13px 20px;border-radius:999px;background:#FFFFFF;color:#16151F;text-decoration:none;font-weight:600">email me →</a>
-<a href="https://www.linkedin.com/in/elizabethortega/" style="padding:13px 20px;border-radius:999px;border:1px solid #4A4960;color:#FFFFFF;text-decoration:none;font-weight:500">linkedin ↗</a>
+<a href="https://www.linkedin.com/in/elizabethortega/" style="padding:13px 20px;border-radius:999px;border:1px solid #4A4960;color:#FFFFFF;text-decoration:none;font-weight:500">linkedin ↗︎</a>
 <a id="resume" href="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@main/Ortega-Elizabeth-Resume.pdf" target="_blank" rel="noopener" style="padding:13px 20px;border-radius:999px;border:1px solid #4A4960;color:#FFFFFF;text-decoration:none;font-weight:500">résumé ↓</a>
 </div>
 </div>
@@ -230,7 +237,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <div style="display:flex;align-items:flex-end;gap:6px"><span class="bob" style="display:block"><img width="84" height="84" style="display:block" alt="" src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@9fc1f5dc0349b5bdaa6726964ac4f34be70c1fe2/svg/73213a7ed8c90d27d83dd9767a184240.svg"></span><span class="bob" style="display:block;animation-delay:.55s"><img width="52" height="52" style="display:block" alt="" src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@9fc1f5dc0349b5bdaa6726964ac4f34be70c1fe2/svg/599f56ce2188142e646497d079b733c8.svg"></span></div>
 <span style="font-family:'Silkscreen', 'Courier New', monospace;font-size:30px;color:#FFE07A;letter-spacing:.04em">CONTINUE?</span>
 <div style="display:flex;gap:10px;font-family:'Silkscreen', 'Courier New', monospace;font-size:15px">
-<a href="https://calendly.com/elizabeth-michelle-ortega/coffee-chat" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;height:44px;padding:0 16px;border-radius:8px;background:#FFE07A;color:#16151F;text-decoration:none">▶ YES</a>
+<a href="https://calendly.com/elizabeth-michelle-ortega/coffee-chat" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;height:44px;padding:0 16px;border-radius:8px;background:#FFE07A;color:#16151F;text-decoration:none">▶︎ YES</a>
 <a href="#top" style="display:inline-flex;align-items:center;height:44px;padding:0 16px;border-radius:8px;border:1px solid #4A4960;color:#FFFFFF;text-decoration:none">NO</a>
 </div>
 <span style="font-family:'Silkscreen', 'Courier New', monospace;font-size:11px;color:#9C9BB0">INSERT COFFEE CHAT TO PLAY</span>

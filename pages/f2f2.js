@@ -310,7 +310,7 @@
             else if (kq.length > 1 && rows.length === kq.length) {
               // every child on its own row -> it's really a vertical stack at this width
               dir = 'vertical'; n.stackDirection = 'vertical'; n.stackWrapEnabled = false; n.stackDistribution = 'start';
-              n.stackAlignment = ai.includes('center') ? 'center' : ai.includes('end') ? 'end' : 'start';
+              n.stackAlignment = ai.includes('center') && !jc.includes('between') ? 'center' : 'start';
             }
           } else if (new Set(kq.map((q) => Math.round(q.left / 8))).size <= 1) n.stackWrapEnabled = false;
         }
@@ -342,6 +342,17 @@
         delete n.__forceCols;
         // fixed-count grids squeezed on small screens: fall back to fewer columns
         if (cols > 1 && contentW / cols < 120) cols = Math.max(1, Math.floor(contentW / 150));
+        if (cols === 1 && !n.__keepGrid) {
+          // one column: a plain vertical stack, so each card is only as tall as its own content
+          n.layout = 'stack'; n.stackDirection = 'vertical'; n.stackWrapEnabled = false; n.stackDistribution = 'start'; n.stackAlignment = 'start';
+          n.gap = Math.round(rowGap || px(cs.gap) || colGap);
+          for (const b of built) {
+            b.n.gridItemFillCellWidth = false; b.n.gridItemFillCellHeight = false;
+            if (b.n.__class === 'RichTextNode' || b.n.layout || b.n.fillType !== 'image') { b.n.widthType = 3; b.n.width = 1; }
+            else { b.n.widthType = 3; b.n.width = 1; }
+            if (b.n.__class === 'RichTextNode' || b.n.layout) b.n.heightType = 2;
+          }
+        } else {
         n.layout = 'grid';
         n.gridColumnCount = cols; n.gridColumnWidthType = 'minmax'; n.gridColumnMinWidth = 10; n.gridColumnWidth = 10; n.gridRowHeightType = 'auto';
         n.gridRowCount = Math.ceil(built.length / cols); n.gridAlignment = 'start';
@@ -352,6 +363,7 @@
           b.n.widthType = 3; b.n.width = 1; b.n.gridItemFillCellWidth = true; b.n.gridItemFillCellHeight = false;
           if (b.n.__class === 'RichTextNode' || b.n.layout) b.n.heightType = 2;
           if (stretch && b.n.__class === 'FrameNode' && b.n.layout && b.n.fillType !== 'image') { b.n.gridItemFillCellHeight = true; b.n.heightType = 3; b.n.height = 1; }
+        }
         }
       } else {
         // measure gaps along main axis
@@ -513,7 +525,7 @@
     } finally { window.getComputedStyle = prevGCS; document.createRange = prevCR; }
   };
 
-  const BPKEYS = ['maxWidth', 'width', 'height', 'widthType', 'heightType', 'stackDirection', 'stackDistribution', 'stackAlignment', 'stackWrapEnabled', 'gap', 'padding', 'paddingPerSide', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'gridColumnCount', 'gridRowCount', 'html', 'left', 'top', 'right', 'bottom', 'fillImage', 'aspectRatio', 'radius', 'radiusTopLeft', 'radiusTopRight', 'radiusBottomLeft', 'radiusBottomRight', 'positionStickyTop'];
+  const BPKEYS = ['layout', 'gridType', 'maxWidth', 'width', 'height', 'widthType', 'heightType', 'stackDirection', 'stackDistribution', 'stackAlignment', 'stackWrapEnabled', 'gap', 'padding', 'paddingPerSide', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'gridColumnCount', 'gridRowCount', 'html', 'left', 'top', 'right', 'bottom', 'fillImage', 'aspectRatio', 'radius', 'radiusTopLeft', 'radiusTopRight', 'radiusBottomLeft', 'radiusBottomRight', 'positionStickyTop'];
   const index = (n, m = new Map()) => { m.set(n.id, n); (n.children || []).forEach((c) => index(c, m)); return m; };
   const diffTrees = (D, X) => {
     const dm = index(D), xm = index(X), out = {};

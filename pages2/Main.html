@@ -1,4 +1,11 @@
-<!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0">
+<!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0"><style>
+@media (max-width: 1199px) { [data-ov="StickyToc"] { display: none !important; } }
+@media (max-width: 809px) {
+  [data-m="nav"] { flex-direction: column !important; justify-content: center !important; gap: 4px !important; padding: 8px 12px !important; }
+  [data-m="navlinks"] { justify-content: center !important; flex-wrap: nowrap !important; gap: 0 !important; }
+  [data-m="navlinks"] a.navlink { padding: 8px 8px !important; font-size: 14px !important; }
+  [data-m="sayhi"] { margin-left: 6px !important; padding: 8px 13px !important; font-size: 14px !important; white-space: nowrap; }
+}</style>
 <div data-helmet="1">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Instrument+Sans:wght@400;500;600&amp;family=Silkscreen&amp;display=swap">
 <style>
@@ -18,17 +25,17 @@ a{color:#16151F}a:hover{color:#2569B8}
 </div>
 <div id="top" style="min-height:100vh;background:#FBFBFD;color:#16151F;font-family:'Instrument Sans', 'Avenir Next', 'Segoe UI', sans-serif;font-size:17px;line-height:1.6">
 <header style="position:relative;z-index:2;background:rgba(251,251,253,0.82);backdrop-filter:blur(10px);border-bottom:1px solid #E6E6EE">
-<nav style="max-width:1240px;margin:0 auto;padding:10px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
+<nav style="max-width:1240px;margin:0 auto;padding:10px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px" data-m="nav">
 <a href="Main.dc.html" style="display:flex;align-items:center;gap:10px;min-height:44px;text-decoration:none">
 <span class="bob" style="display:block"><img width="32" height="32" style="display:block" alt="" src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@9fc1f5dc0349b5bdaa6726964ac4f34be70c1fe2/svg/b4aed4425787b408087c7273da62268a.svg"></span>
 <span style="font-family:'Instrument Serif', 'Iowan Old Style', Georgia, serif;font-size:26px;line-height:1">elizabeth.</span>
 </a>
-<div style="display:flex;flex-wrap:wrap;align-items:center;gap:2px;font-size:15px">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:2px;font-size:15px" data-m="navlinks">
 <a class="navlink" href="Main.dc.html#work" style="padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:600"><span style="display:inline-block;width:7px;height:7px;background:#16151F;margin-right:7px;vertical-align:2px"></span>work</a>
 
 <a class="navlink" href="About.dc.html" style="padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:500">about</a>
 <a class="navlink" href="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@main/Ortega-Elizabeth-Resume.pdf" target="_blank" rel="noopener" style="padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:500">résumé ↓</a><a class="navlink" href="Play.dc.html" style="padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:500">play</a>
-<a href="https://calendly.com/elizabeth-michelle-ortega/coffee-chat" target="_blank" rel="noopener" style="margin-left:8px;padding:10px 16px;border-radius:999px;background:#16151F;color:#FFFFFF;text-decoration:none;font-weight:600">say hi →</a>
+<a href="https://calendly.com/elizabeth-michelle-ortega/coffee-chat" target="_blank" rel="noopener" style="margin-left:8px;padding:10px 16px;border-radius:999px;background:#16151F;color:#FFFFFF;text-decoration:none;font-weight:600" data-m="sayhi">say hi →</a>
 </div>
 </nav>
 </header>
@@ -42,7 +49,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 
 <div style="position:relative;max-width:1240px;margin:0 auto;padding:96px 24px 320px;display:flex;flex-direction:column;gap:22px">
 <span style="display:flex;align-items:center;gap:10px;font-family:'Silkscreen', 'Courier New', monospace;font-size:13px;letter-spacing:.06em"><span style="display:block;border-radius:8px;background:rgba(255,255,255,.7);padding:4px"><img width="28" height="28" style="display:block" alt="" src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@9fc1f5dc0349b5bdaa6726964ac4f34be70c1fe2/svg/ac04c7b5a726f790b506c9fce21f89a0.svg"></span>hola, i'm liz · player 1</span>
-<span style="align-self:flex-start;display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);font-size:14px;font-weight:500"><span style="width:8px;height:8px;border-radius:50%;background:#1E8A4C;box-shadow:0 0 0 3px rgba(30,138,76,.2)"></span>looking for summer internships &amp; new-grad roles</span>
+<span style="align-self:flex-start;display:inline-flex;align-items:flex-start;gap:8px;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);font-size:14px;font-weight:500"><span style="width:8px;height:8px;border-radius:50%;background:#1E8A4C;box-shadow:0 0 0 3px rgba(30,138,76,.2);flex:none;margin-top:7px"></span>looking for summer internships &amp; new-grad roles</span>
 <h1 style="margin:0;max-width:820px;font-family:'Instrument Serif', 'Iowan Old Style', Georgia, serif;font-weight:400;font-size:clamp(48px,7vw,92px);line-height:.98;letter-spacing:-0.01em;text-wrap:balance">Designer who turns complex problems into products people <em style="color:#2569B8;white-space:nowrap">actually use.</em></h1>
 <p style="margin:0;max-width:560px;font-size:18px;color:#24233A">Blending behavioral science, HCI &amp; HCD with purposeful, boundless curiosity. Social advocate and community builder studying Cognitive Science + Media Studies at Pomona College.</p>
 <div style="display:flex;flex-wrap:wrap;gap:10px">
@@ -195,7 +202,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <div style="display:flex;flex-direction:column;gap:28px">
 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px">
 <div style="display:flex;flex-direction:column;gap:10px"><span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#5B5A6B">party reviews</span><h2 style="margin:0;font-family:'Instrument Serif', 'Iowan Old Style', Georgia, serif;font-weight:400;font-size:clamp(40px,5vw,64px);line-height:1">from the people <em>I've worked with.</em></h2></div>
-<span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><a href="https://www.linkedin.com/in/elizabethortega/details/recommendations/?detailScreenTabIndex=0" target="_blank" rel="noopener" style="padding:10px 16px;border-radius:999px;border:1px solid #D5D5E0;background:#FFFFFF;text-decoration:none;font-size:15px">available on LinkedIn ↗</a><span style="font-size:12px;color:#8A89A0">LinkedIn sign-in required</span></span>
+<a href="https://www.linkedin.com/in/elizabethortega/details/recommendations/?detailScreenTabIndex=0" target="_blank" rel="noopener" style="padding:10px 16px;border-radius:999px;border:1px solid #D5D5E0;background:#FFFFFF;text-decoration:none;font-size:15px;white-space:nowrap">available on LinkedIn ↗︎</a>
 </div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:20px;align-items:start">
 <figure style="margin:0;padding:26px;border-radius:22px;background:#FFFFFF;border:1px solid #E6E6EE;display:flex;flex-direction:column;gap:16px">
@@ -235,7 +242,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <h2 style="margin:0;font-family:'Instrument Serif', 'Iowan Old Style', Georgia, serif;font-weight:400;font-size:clamp(44px,6vw,80px);line-height:1">Every good product has a little <em style="color:#F4A7C0">play</em> in it.</h2>
 <div style="display:flex;flex-wrap:wrap;gap:10px">
 <a href="mailto:elizabeth.michelle.ortega@gmail.com" target="_blank" rel="noopener" title="elizabeth.michelle.ortega@gmail.com" style="padding:13px 20px;border-radius:999px;background:#FFFFFF;color:#16151F;text-decoration:none;font-weight:600">email me →</a>
-<a href="https://www.linkedin.com/in/elizabethortega/" style="padding:13px 20px;border-radius:999px;border:1px solid #4A4960;color:#FFFFFF;text-decoration:none;font-weight:500">linkedin ↗</a>
+<a href="https://www.linkedin.com/in/elizabethortega/" style="padding:13px 20px;border-radius:999px;border:1px solid #4A4960;color:#FFFFFF;text-decoration:none;font-weight:500">linkedin ↗︎</a>
 <a id="resume" href="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@main/Ortega-Elizabeth-Resume.pdf" target="_blank" rel="noopener" style="padding:13px 20px;border-radius:999px;border:1px solid #4A4960;color:#FFFFFF;text-decoration:none;font-weight:500">résumé ↓</a>
 </div>
 </div>
@@ -243,7 +250,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <div style="display:flex;align-items:flex-end;gap:6px"><span class="bob" style="display:block"><img width="84" height="84" style="display:block" alt="" src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@9fc1f5dc0349b5bdaa6726964ac4f34be70c1fe2/svg/73213a7ed8c90d27d83dd9767a184240.svg"></span><span class="bob" style="display:block;animation-delay:.55s"><img width="52" height="52" style="display:block" alt="" src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@9fc1f5dc0349b5bdaa6726964ac4f34be70c1fe2/svg/599f56ce2188142e646497d079b733c8.svg"></span></div>
 <span style="font-family:'Silkscreen', 'Courier New', monospace;font-size:30px;color:#FFE07A;letter-spacing:.04em">CONTINUE?</span>
 <div style="display:flex;gap:10px;font-family:'Silkscreen', 'Courier New', monospace;font-size:15px">
-<a href="https://calendly.com/elizabeth-michelle-ortega/coffee-chat" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;height:44px;padding:0 16px;border-radius:8px;background:#FFE07A;color:#16151F;text-decoration:none">▶ YES</a>
+<a href="https://calendly.com/elizabeth-michelle-ortega/coffee-chat" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;height:44px;padding:0 16px;border-radius:8px;background:#FFE07A;color:#16151F;text-decoration:none">▶︎ YES</a>
 <a href="#top" style="display:inline-flex;align-items:center;height:44px;padding:0 16px;border-radius:8px;border:1px solid #4A4960;color:#FFFFFF;text-decoration:none">NO</a>
 </div>
 <span style="font-family:'Silkscreen', 'Courier New', monospace;font-size:11px;color:#9C9BB0">INSERT COFFEE CHAT TO PLAY</span>

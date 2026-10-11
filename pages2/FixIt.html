@@ -1,4 +1,11 @@
-<!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0">
+<!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0"><style>
+@media (max-width: 1199px) { [data-ov="StickyToc"] { display: none !important; } }
+@media (max-width: 809px) {
+  [data-m="nav"] { flex-direction: column !important; justify-content: center !important; gap: 4px !important; padding: 8px 12px !important; }
+  [data-m="navlinks"] { justify-content: center !important; flex-wrap: nowrap !important; gap: 0 !important; }
+  [data-m="navlinks"] a.navlink { padding: 8px 8px !important; font-size: 14px !important; }
+  [data-m="sayhi"] { margin-left: 6px !important; padding: 8px 13px !important; font-size: 14px !important; white-space: nowrap; }
+}</style>
 <div data-helmet="1">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Instrument+Sans:wght@400;500;600&amp;family=Silkscreen&amp;display=swap">
 <style>
@@ -18,17 +25,17 @@ a{color:#16151F}a:hover{color:#2569B8}
 </div>
 <div id="top" style="min-height:100vh;background:#FBFBFD;color:#16151F;font-family:'Instrument Sans', 'Avenir Next', 'Segoe UI', sans-serif;font-size:17px;line-height:1.6">
 <header style="position:relative;z-index:2;background:rgba(251,251,253,0.82);backdrop-filter:blur(10px);border-bottom:1px solid #E6E6EE">
-<nav style="max-width:1240px;margin:0 auto;padding:10px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
+<nav style="max-width:1240px;margin:0 auto;padding:10px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px" data-m="nav">
 <a href="Main.dc.html" style="display:flex;align-items:center;gap:10px;min-height:44px;text-decoration:none">
 <span class="bob" style="display:block"><img width="32" height="32" style="display:block" alt="" src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@9fc1f5dc0349b5bdaa6726964ac4f34be70c1fe2/svg/b4aed4425787b408087c7273da62268a.svg"></span>
 <span style="font-family:'Instrument Serif', 'Iowan Old Style', Georgia, serif;font-size:26px;line-height:1">elizabeth.</span>
 </a>
-<div style="display:flex;flex-wrap:wrap;align-items:center;gap:2px;font-size:15px">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:2px;font-size:15px" data-m="navlinks">
 <a class="navlink" href="Main.dc.html#work" style="padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:600"><span style="display:inline-block;width:7px;height:7px;background:#16151F;margin-right:7px;vertical-align:2px"></span>work</a>
 
 <a class="navlink" href="About.dc.html" style="padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:500">about</a>
 <a class="navlink" href="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@main/Ortega-Elizabeth-Resume.pdf" target="_blank" rel="noopener" style="padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:500">résumé ↓</a><a class="navlink" href="Play.dc.html" style="padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:500">play</a>
-<a href="https://calendly.com/elizabeth-michelle-ortega/coffee-chat" target="_blank" rel="noopener" style="margin-left:8px;padding:10px 16px;border-radius:999px;background:#16151F;color:#FFFFFF;text-decoration:none;font-weight:600">say hi →</a>
+<a href="https://calendly.com/elizabeth-michelle-ortega/coffee-chat" target="_blank" rel="noopener" style="margin-left:8px;padding:10px 16px;border-radius:999px;background:#16151F;color:#FFFFFF;text-decoration:none;font-weight:600" data-m="sayhi">say hi →</a>
 </div>
 </nav>
 </header>
@@ -59,7 +66,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <h1 style="margin:0;font-family:'Instrument Serif', 'Iowan Old Style', Georgia, serif;font-weight:400;font-size:clamp(44px,5.4vw,72px);line-height:1">Fix It in Post-It, <em>empathy you can play.</em></h1>
 <p style="margin:0;color:#3D3C52">A pixel-art platformer where you play a sticky note crossing campus, living a day in three classmates' shoes, then leave each level with a “How might we…” question. I designed and built it to make the empathize stage of human-centered design hands-on for college students.</p>
 <div style="display:flex;flex-wrap:wrap;gap:8px">
-<a href="https://lizortega.itch.io/fix-it-in-post-it" style="padding:10px 16px;border-radius:999px;background:#16151F;color:#FFFFFF;text-decoration:none;font-size:15px;font-weight:600">▶ play on itch.io ↗</a>
+<a href="https://lizortega.itch.io/fix-it-in-post-it" style="padding:10px 16px;border-radius:999px;background:#16151F;color:#FFFFFF;text-decoration:none;font-size:15px;font-weight:600">▶︎ play on itch.io ↗︎</a>
 <a href="#flow" style="padding:10px 16px;border-radius:999px;border:1px solid #D5D5E0;background:#FFFFFF;text-decoration:none;font-size:15px">see the levels ↓</a>
 </div>
 </div>
@@ -81,7 +88,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <div style="display:flex;align-items:center;gap:14px"><span class="bob" style="display:block"><img width="40" height="40" style="display:block" alt="" src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@9fc1f5dc0349b5bdaa6726964ac4f34be70c1fe2/svg/1ec3bead34e03eed39ebb0a054a3b343.svg"></span><span style="font-size:15px" data-ov="ModeHint">in a hurry? switch to the 2-min speedrun.</span></div>
 <div style="display:flex;padding:4px;border-radius:999px;background:#F0F0F5;gap:4px">
 <button type="button" data-ov="ToSpeed" style="min-height:44px;padding:8px 16px;border:0;border-radius:999px;font:inherit;font-size:15px;cursor:pointer;background:transparent;font-weight:500;color:#16151F">» speedrun · 2 min</button>
-<button type="button" data-ov="ToFull" style="min-height:44px;padding:8px 16px;border:0;border-radius:999px;font:inherit;font-size:15px;cursor:pointer;background:#FFFFFF;font-weight:600;color:#16151F">▶ full playthrough</button>
+<button type="button" data-ov="ToFull" style="min-height:44px;padding:8px 16px;border:0;border-radius:999px;font:inherit;font-size:15px;cursor:pointer;background:#FFFFFF;font-weight:600;color:#16151F">▶︎ full playthrough</button>
 </div>
 </div>
 
@@ -90,7 +97,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <div style="padding:24px;border-radius:18px;background:#FFFFFF;border:1px solid #E6E6EE;display:flex;flex-direction:column;gap:8px"><span style="font-family:'Silkscreen', 'Courier New', monospace;font-size:11px;color:#2569B8">THE BOSS</span><span>Students learn “empathize” as a definition, and everyday campus friction is so normal nobody questions it.</span></div><div style="padding:24px;border-radius:18px;background:#FFFFFF;border:1px solid #E6E6EE;display:flex;flex-direction:column;gap:8px"><span style="font-family:'Silkscreen', 'Courier New', monospace;font-size:11px;color:#2569B8">MY MOVES</span><span>Designed and built a 3-level platformer where each mechanic recreates a real campus frustration, ending in a How Might We prompt.</span></div><div style="padding:24px;border-radius:18px;background:#FFFFFF;border:1px solid #E6E6EE;display:flex;flex-direction:column;gap:8px"><span style="font-family:'Silkscreen', 'Courier New', monospace;font-size:11px;color:#2569B8">VICTORY</span><span>A playable game on itch.io, used with ~40 club members and Intro to HCD students to make empathy hands-on.</span></div>
 </div>
 <video src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@main/2990583e43ccb6e2849be66516815f3c.mp4" controls="" muted="" playsinline="" preload="metadata" aria-label="Fix It in Post-It trailer" style="display:block;width:100%;height:auto;border-radius:20px;background:#FFFDF6;border:1px solid #E6E6EE"></video>
-<button type="button" data-ov="GoFull" style="align-self:flex-start;min-height:48px;padding:13px 22px;border:0;border-radius:999px;background:#16151F;color:#FFFFFF;font:inherit;font-weight:600;cursor:pointer">want the details? full playthrough ▶</button>
+<button type="button" data-ov="GoFull" style="align-self:flex-start;min-height:48px;padding:13px 22px;border:0;border-radius:999px;background:#16151F;color:#FFFFFF;font:inherit;font-weight:600;cursor:pointer">want the details? full playthrough ▶︎</button>
 </div>
 
 
@@ -220,7 +227,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <div style="display:flex;flex-wrap:wrap;gap:20px;padding:6px 4px 12px"><figure style="margin:0;flex:1 1 240px;padding:22px;background:#FFE58A;transform:rotate(-1.5deg);box-shadow:0 12px 20px rgba(22,21,31,.10);display:flex;flex-direction:column;gap:10px"><blockquote style="margin:0;font-family:'Instrument Serif', 'Iowan Old Style', Georgia, serif;font-size:21px;line-height:1.3">“This is so real. I felt like I was in Frary and didn't know when I'd get my food. Sometimes the lines really are around the block.”</blockquote><figcaption style="font-family:'Silkscreen', 'Courier New', monospace;font-size:10px;color:#3D3C52">PLAYTESTER · CLASSMATE</figcaption></figure><figure style="margin:0;flex:1 1 240px;padding:22px;background:#FBC4D6;transform:rotate(1.2deg);box-shadow:0 12px 20px rgba(22,21,31,.10);display:flex;flex-direction:column;gap:10px"><blockquote style="margin:0;font-family:'Instrument Serif', 'Iowan Old Style', Georgia, serif;font-size:21px;line-height:1.3">“Giving people the experience without a conclusion was really thought-provoking. The design was so well thought out.”</blockquote><figcaption style="font-family:'Silkscreen', 'Courier New', monospace;font-size:10px;color:#3D3C52">PLAYTESTER · CLASSMATE</figcaption></figure><figure style="margin:0;flex:1 1 240px;padding:22px;background:#BFD8F5;transform:rotate(-1deg);box-shadow:0 12px 20px rgba(22,21,31,.10);display:flex;flex-direction:column;gap:10px"><blockquote style="margin:0;font-family:'Instrument Serif', 'Iowan Old Style', Georgia, serif;font-size:21px;line-height:1.3">“This would be great for education, and for starting conversations with people who aren't students but are there to support them.”</blockquote><figcaption style="font-family:'Silkscreen', 'Courier New', monospace;font-size:10px;color:#3D3C52">PLAYTESTER · CLASSMATE</figcaption></figure></div>
 <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:22px 24px;border-radius:18px;background:#FFF1C2">
 <span style="font-size:16px;max-width:600px"><strong>Play it yourself.</strong> Free on itch.io for Windows. A browser version is next.</span>
-<a href="https://lizortega.itch.io/fix-it-in-post-it" style="padding:10px 16px;border-radius:999px;background:#16151F;color:#FFFFFF;text-decoration:none;font-size:15px;font-weight:600">▶ play on itch.io ↗</a>
+<a href="https://lizortega.itch.io/fix-it-in-post-it" style="padding:10px 16px;border-radius:999px;background:#16151F;color:#FFFFFF;text-decoration:none;font-size:15px;font-weight:600">▶︎ play on itch.io ↗︎</a>
 </div>
 </article>
 
@@ -232,7 +239,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
 <div style="flex:3 1 380px;display:flex;flex-direction:column;gap:8px"><img src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@main/4bea0308638738a0d4280dba1e2b0c38.jpg" alt="The DFA leadership team at the fall info session" style="display:block;width:100%;height:auto;border-radius:18px;"><span style="font-size:13px;color:#5B5A6B">Our team at the fall kickoff.</span>
 <span style="font-size:14px;color:#3D3C52;line-height:1.5">Our club is now part of <strong style="color:#16151F">World Studios</strong>. It was formerly Design for America (DFA), and we still recruit alongside DFA.</span>
-<div style="display:flex;flex-wrap:wrap;gap:8px"><a href="https://world-studios-5cs.vercel.app" target="_blank" rel="noopener" style="padding:8px 14px;border-radius:999px;background:#16151F;color:#FFFFFF;text-decoration:none;font-size:14px;font-weight:600">our recruiting site ↗</a><span style="align-self:center;font-size:13px;color:#5B5A6B">I designed and built this site myself.</span><a href="https://worldstudios.secure-platform.com/site" target="_blank" rel="noopener" style="padding:8px 14px;border-radius:999px;border:1px solid #D5D5E0;background:#FFFFFF;text-decoration:none;font-size:14px">World Studios ↗</a></div></div>
+<div style="display:flex;flex-wrap:wrap;gap:8px"><a href="https://world-studios-5cs.vercel.app" target="_blank" rel="noopener" style="padding:8px 14px;border-radius:999px;background:#16151F;color:#FFFFFF;text-decoration:none;font-size:14px;font-weight:600">our recruiting site ↗︎</a><span style="align-self:center;font-size:13px;color:#5B5A6B">I designed and built this site myself.</span><a href="https://worldstudios.secure-platform.com/site" target="_blank" rel="noopener" style="padding:8px 14px;border-radius:999px;border:1px solid #D5D5E0;background:#FFFFFF;text-decoration:none;font-size:14px">World Studios ↗︎</a></div></div>
 <div style="flex:2 1 240px;display:flex;flex-direction:column;gap:8px"><img src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@main/82750444979d31cd5edfaeb5ebdce30b.jpg" alt="Whiteboard covered in sticky notes answering: What do you want to get out of DFA?" style="display:block;width:100%;height:auto;border-radius:18px;max-height:520px;object-fit:cover;object-position:top"><span style="font-size:13px;color:#5B5A6B">We started by asking members what they wanted out of DFA, then built programming around the answers.</span></div>
 </div>
 
@@ -282,7 +289,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <h2 style="margin:0;font-family:'Instrument Serif', 'Iowan Old Style', Georgia, serif;font-weight:400;font-size:clamp(44px,6vw,80px);line-height:1">Every good product has a little <em style="color:#F4A7C0">play</em> in it.</h2>
 <div style="display:flex;flex-wrap:wrap;gap:10px">
 <a href="mailto:elizabeth.michelle.ortega@gmail.com" target="_blank" rel="noopener" title="elizabeth.michelle.ortega@gmail.com" style="padding:13px 20px;border-radius:999px;background:#FFFFFF;color:#16151F;text-decoration:none;font-weight:600">email me →</a>
-<a href="https://www.linkedin.com/in/elizabethortega/" style="padding:13px 20px;border-radius:999px;border:1px solid #4A4960;color:#FFFFFF;text-decoration:none;font-weight:500">linkedin ↗</a>
+<a href="https://www.linkedin.com/in/elizabethortega/" style="padding:13px 20px;border-radius:999px;border:1px solid #4A4960;color:#FFFFFF;text-decoration:none;font-weight:500">linkedin ↗︎</a>
 <a id="resume" href="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@main/Ortega-Elizabeth-Resume.pdf" target="_blank" rel="noopener" style="padding:13px 20px;border-radius:999px;border:1px solid #4A4960;color:#FFFFFF;text-decoration:none;font-weight:500">résumé ↓</a>
 </div>
 </div>
@@ -290,7 +297,7 @@ a{color:#16151F}a:hover{color:#2569B8}
 <div style="display:flex;align-items:flex-end;gap:6px"><span class="bob" style="display:block"><img width="84" height="84" style="display:block" alt="" src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@9fc1f5dc0349b5bdaa6726964ac4f34be70c1fe2/svg/73213a7ed8c90d27d83dd9767a184240.svg"></span><span class="bob" style="display:block;animation-delay:.55s"><img width="52" height="52" style="display:block" alt="" src="https://cdn.jsdelivr.net/gh/liz-ortega/portfolio-assets@9fc1f5dc0349b5bdaa6726964ac4f34be70c1fe2/svg/599f56ce2188142e646497d079b733c8.svg"></span></div>
 <span style="font-family:'Silkscreen', 'Courier New', monospace;font-size:30px;color:#FFE07A;letter-spacing:.04em">CONTINUE?</span>
 <div style="display:flex;gap:10px;font-family:'Silkscreen', 'Courier New', monospace;font-size:15px">
-<a href="https://calendly.com/elizabeth-michelle-ortega/coffee-chat" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;height:44px;padding:0 16px;border-radius:8px;background:#FFE07A;color:#16151F;text-decoration:none">▶ YES</a>
+<a href="https://calendly.com/elizabeth-michelle-ortega/coffee-chat" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;height:44px;padding:0 16px;border-radius:8px;background:#FFE07A;color:#16151F;text-decoration:none">▶︎ YES</a>
 <a href="#top" style="display:inline-flex;align-items:center;height:44px;padding:0 16px;border-radius:8px;border:1px solid #4A4960;color:#FFFFFF;text-decoration:none">NO</a>
 </div>
 <span style="font-family:'Silkscreen', 'Courier New', monospace;font-size:11px;color:#9C9BB0">INSERT COFFEE CHAT TO PLAY</span>

@@ -152,6 +152,44 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
     // slightly tighter contents links so the whole list fits on a laptop screen
     for (const a of box.querySelectorAll("a")) a.setAttribute("style", (a.getAttribute("style") || "").replace("padding:5px 0 5px 10px", "padding:3px 0 3px 10px"));
   }
+  // ---- mobile polish (Liz's feedback, Oct 10) ----
+  // LinkedIn reviews link: drop the "sign-in required" note, keep the pill on one line
+  for (const sp of [...root.querySelectorAll("span")]) {
+    if (/^\s*LinkedIn sign-in required\s*$/i.test(sp.textContent)) {
+      const wrap = sp.parentElement; sp.remove();
+      const a = wrap && wrap.querySelector("a");
+      if (a && wrap.children.length === 1 && wrap.tagName === "SPAN") { a.setAttribute("style", (a.getAttribute("style") || "") + ";white-space:nowrap"); wrap.replaceWith(a); }
+    }
+  }
+  // "looking for summer internships" pill: keep the green dot beside the first line when it wraps
+  for (const sp of root.querySelectorAll("span")) {
+    if (sp.children.length && /^\s*looking for summer internships/i.test(sp.textContent) && /border-radius:999px/.test(sp.getAttribute("style") || "")) {
+      sp.setAttribute("style", (sp.getAttribute("style") || "").replace("align-items:center", "align-items:flex-start"));
+      const dot = sp.firstElementChild;
+      if (dot) dot.setAttribute("style", (dot.getAttribute("style") || "") + ";flex:none;margin-top:7px");
+    }
+  }
+  // nav: mark the parts so phones get a centred, single-row nav
+  for (const nav of root.querySelectorAll("nav")) {
+    nav.setAttribute("data-m", "nav");
+    const say = [...nav.querySelectorAll("a")].find((a) => /^\s*say hi/i.test(a.textContent));
+    if (say) say.setAttribute("data-m", "sayhi");
+    const links = nav.querySelector("a.navlink");
+    if (links) links.parentElement.setAttribute("data-m", "navlinks");
+  }
+  // iPhones draw some arrows/triangles as colour emoji; ask for the plain text glyph instead
+  const tw = outDoc.createTreeWalker(root, 4);
+  for (let t = tw.nextNode(); t; t = tw.nextNode()) if (/[↗↖↘↙↔↕▶◀☀]/.test(t.data)) t.data = t.data.replace(/([↗↖↘↙↔↕▶◀☀])(?!︎)/g, "$1︎");
+  const mcss = outDoc.createElement("style");
+  mcss.textContent = `
+@media (max-width: 1199px) { [data-ov="StickyToc"] { display: none !important; } }
+@media (max-width: 809px) {
+  [data-m="nav"] { flex-direction: column !important; justify-content: center !important; gap: 4px !important; padding: 8px 12px !important; }
+  [data-m="navlinks"] { justify-content: center !important; flex-wrap: nowrap !important; gap: 0 !important; }
+  [data-m="navlinks"] a.navlink { padding: 8px 8px !important; font-size: 14px !important; }
+  [data-m="sayhi"] { margin-left: 6px !important; padding: 8px 13px !important; font-size: 14px !important; white-space: nowrap; }
+}`;
+  root.insertBefore(mcss, root.firstChild);
   // USPS before/after slider -> one code component; drop the range row
   for (const im of root.querySelectorAll("img")) {
     if (!/clip-path/.test(im.getAttribute("style") || "")) continue;
