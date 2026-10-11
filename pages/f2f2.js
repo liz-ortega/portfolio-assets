@@ -421,7 +421,9 @@
         if (real.some(autoM) && real.every((b) => autoM(b) || b.n.widthType === 3)) n.stackAlignment = 'center';
       }
       for (const b of built) n.children.push(b.n);
-      // absolute children
+      // absolute children (ones that come before the content in the page sit behind it, like decorative clouds)
+      const firstFlow = (inflow.find((k) => k.el) || {}).el;
+      let behind = 0;
       for (const k of abs) {
         const kr = k.el.getBoundingClientRect();
         const cn = build(k.el, null); if (!cn) continue;
@@ -439,7 +441,8 @@
           else if (kcs.top !== 'auto' && kcs.bottom !== 'auto' && !k.el.style.height) { cn.top = Math.round(T); cn.bottom = Math.round(B); }
           else cn.top = Math.round(T);
         }
-        n.children.push(cn);
+        if (firstFlow && (k.el.compareDocumentPosition(firstFlow) & Node.DOCUMENT_POSITION_FOLLOWING)) n.children.splice(behind++, 0, cn);
+        else n.children.push(cn);
       }
       // a frame whose height is driven by content
       const explicitH = el.style.height || el.style.aspectRatio;

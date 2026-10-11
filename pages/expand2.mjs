@@ -166,7 +166,12 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
     if (sp.children.length && /^\s*looking for summer internships/i.test(sp.textContent) && /border-radius:999px/.test(sp.getAttribute("style") || "")) {
       sp.setAttribute("style", (sp.getAttribute("style") || "").replace("align-items:center", "align-items:flex-start"));
       const dot = sp.firstElementChild;
-      if (dot) dot.setAttribute("style", (dot.getAttribute("style") || "") + ";flex:none;margin-top:7px");
+      if (dot) {
+        // the dot sits in a box one text-line tall, so it lines up with the first line whether or not the text wraps
+        const box = outDoc.createElement("span");
+        box.setAttribute("style", "display:flex;align-items:center;justify-content:center;flex:none;width:8px;height:22px");
+        dot.before(box); box.appendChild(dot);
+      }
     }
   }
   // nav: mark the parts so phones get a centred, single-row nav
