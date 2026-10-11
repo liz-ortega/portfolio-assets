@@ -163,7 +163,7 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
   }
   // "looking for summer internships" pill: keep the green dot beside the first line when it wraps
   for (const sp of root.querySelectorAll("span")) {
-    if (sp.children.length && /^\s*looking for summer internships/i.test(sp.textContent) && /border-radius:999px/.test(sp.getAttribute("style") || "")) {
+    if (sp.children.length && /^\s*looking for summer/i.test(sp.textContent) && /border-radius:999px/.test(sp.getAttribute("style") || "")) {
       sp.setAttribute("style", (sp.getAttribute("style") || "").replace("align-items:center", "align-items:flex-start"));
       const dot = sp.firstElementChild;
       if (dot) {
