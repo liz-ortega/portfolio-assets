@@ -331,9 +331,10 @@ export function BrickDig() {
                     style={{ position: "absolute", inset: 0, width: "100%", height: "100%", touchAction: "none", cursor: "crosshair", opacity: found ? 0 : 1, pointerEvents: found ? "none" : "auto", transition: "opacity .6s" }}
                 />
             </div>
-            <p style={{ margin: 0, fontFamily: SANS, fontSize: 15, lineHeight: 1.55, color: BODY, opacity: found ? 1 : 0, transform: found ? "none" : "translateY(6px)", transition: "opacity .5s, transform .5s" }}>
+            {found ? <p style={{ margin: 0, fontFamily: SANS, fontSize: 15, lineHeight: 1.55, color: BODY, animation: reduced() ? "none" : "lizRise .5s ease-out" }}>
                 When Columbus came down in 2021, neighbors saved real bricks as keepsakes. My 3D-printed brick kept failing, so I labeled one by hand. The imperfections felt right: memory holds on to fragments, not exact replicas.
-            </p>
+            </p> : <span style={{ fontFamily: SANS, fontSize: 13, color: MUTED }}>Keep scraping to find it.</span>}
+            <style>{`@keyframes lizRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}`}</style>
         </div>
     )
 }
