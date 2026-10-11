@@ -184,7 +184,7 @@ const html = await p.evaluate(({ src, ASSET, page }) => {
   for (const h of root.querySelectorAll("h2")) {
     if (!/^\s*I research it, design it/.test(h.textContent)) continue;
     h.setAttribute("data-m", "oneline");
-    const w = h.parentElement; w.setAttribute("style", (w.getAttribute("style") || "").replace("max-width:780px", "max-width:100%"));
+    const w = h.parentElement; w.setAttribute("style", (w.getAttribute("style") || "").replace("max-width:780px", "max-width:100%;flex:1 1 100%"));
   }
   const mcss = outDoc.createElement("style");
   mcss.textContent = `
