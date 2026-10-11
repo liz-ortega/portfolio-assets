@@ -341,7 +341,7 @@
         let cols = n.__forceCols || Math.max(1, Math.min(built.length || 1, colCount()));
         delete n.__forceCols;
         // fixed-count grids squeezed on small screens: fall back to fewer columns
-        if (cols > 1 && contentW / cols < 120) cols = Math.max(1, Math.floor(contentW / 150));
+        if (cols > 1 && contentW / cols < 120) cols = Math.max(1, Math.min(cols, Math.floor(contentW / 130)));
         if (cols === 1 && !n.__keepGrid) {
           // one column: a plain vertical stack, so each card is only as tall as its own content
           n.layout = 'stack'; n.stackDirection = 'vertical'; n.stackWrapEnabled = false; n.stackDistribution = 'start'; n.stackAlignment = 'start';
