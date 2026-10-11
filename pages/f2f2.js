@@ -428,7 +428,7 @@
         const kr = k.el.getBoundingClientRect();
         const cn = build(k.el, null); if (!cn) continue;
         const hug = (META.get(cn) || {}).hug;
-        cn.position = 'absolute'; cn.widthType = hug ? 2 : 0; cn.heightType = (hug || cn.__class === 'RichTextNode') ? 2 : 0;
+        cn.position = 'absolute'; cn.widthType = hug ? 2 : 0; cn.heightType = (hug || cn.__class === 'RichTextNode' || (cn.layout && !k.el.style.height)) ? 2 : 0;
         const kcs = getComputedStyle(k.el);
         const L = kr.left - r.left, T = kr.top - r.top, R = r.right - kr.right, B = r.bottom - kr.bottom;
         const fillsBox = Math.abs(L) <= 1 && Math.abs(T) <= 1 && Math.abs(R) <= 1 && Math.abs(B) <= 1;
